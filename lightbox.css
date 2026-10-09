@@ -20,16 +20,19 @@
   flex: 1 1 48%;
   min-width: 0;
   height: min(68dvh, 650px);
+  overflow: hidden;
   border-radius: 16px;
-  background: #0a1227;
+  background: transparent;
   box-shadow:
-    0 0 32px var(--dynamic-glow-color),
-    0 0 80px var(--dynamic-glow-color);
+    0 0 28px var(--dynamic-glow-color),
+    0 0 65px var(--dynamic-glow-color);
   transition: box-shadow 0.6s ease;
 }
 .lightbox-image img {
   display: block;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 16px;
 }
 .lightbox-content > div:last-child {
@@ -46,15 +49,17 @@
   margin-bottom: 22px;
 }
 .lightbox-badges span {
-  border: 1px solid #91baff26;
+  border: 1px solid rgba(56, 189, 248, 0.5);
   border-radius: 100px;
   padding: 6px 12px;
-  background: #75aaff0c;
-  color: #bcd7ff;
+  background: rgba(56, 189, 248, 0.15);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  color: #d6e7ff;
   font-size: 10px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  box-shadow: 0 0 18px #75aaff10;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.2), 0 0 22px rgba(168, 85, 247, 0.15);
 }
 .lightbox-metadata h2 {
   font-size: clamp(30px, 8cqi, 52px);
@@ -70,13 +75,119 @@
   margin: 0;
 }
 .lightbox-info-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
   container-type: inline-size;
   min-width: 0;
-  min-height: 112px;
-  padding: 18px;
-  border: 1px solid #ffffff12;
+  min-height: 140px;
+  padding: 20px;
+  gap: 6px;
+  border: 1.5px solid rgba(14, 165, 233, 0.45);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.035);
+  background: linear-gradient(135deg, rgba(125, 211, 252, 0.12) 0%, rgba(168, 85, 247, 0.06) 50%, rgba(34, 211, 238, 0.08) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.25), inset 0 0 8px rgba(34, 211, 238, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Jasny motyw: szkło baby blue, bez zmian zdjęcia i jego poświaty. */
+:root[data-theme='light'] .photo-lightbox {
+  color-scheme: light;
+  background: rgba(230, 242, 255, 0.92);
+  border-color: rgba(255, 255, 255, 0.65);
+  color: #142e50;
+  box-shadow: 0 30px 100px rgba(20, 46, 80, 0.2);
+}
+:root[data-theme='light'] .photo-lightbox::backdrop {
+  background: rgba(30, 57, 88, 0.35);
+}
+:root[data-theme='light'] .lightbox-badges span {
+  color: #245a97;
+}
+:root[data-theme='light'] .lightbox-info-tile {
+  background: linear-gradient(135deg, rgba(125, 211, 252, 0.38) 0%, rgba(192, 160, 255, 0.22) 50%, rgba(34, 211, 238, 0.25) 100%);
+  border-color: rgba(14, 165, 233, 0.4);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.55);
+}
+:root[data-theme='light'] .lightbox-info-tile:hover {
+  background: linear-gradient(135deg, rgba(125, 211, 252, 0.55) 0%, rgba(192, 160, 255, 0.34) 50%, rgba(34, 211, 238, 0.38) 100%);
+  border-color: rgba(14, 165, 233, 0.65);
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.3), inset 0 0 12px rgba(255, 255, 255, 0.65);
+}
+:root[data-theme='light'] .lightbox-info-tile dt {
+  color: #48668a;
+}
+:root[data-theme='light'] .lightbox-info-tile .lightbox-value {
+  color: #142e50;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
+}
+:root[data-theme='light'] .lightbox-info-tile .lightbox-icon {
+  color: #087fae;
+  filter: drop-shadow(0 0 2px rgba(14, 165, 233, 0.3));
+}
+:root[data-theme='light'] .lightbox-icon {
+  color: #52749a;
+}
+:root[data-theme='light'] .lightbox-description {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(40, 90, 150, 0.12);
+}
+:root[data-theme='light'] .lightbox-description p,
+:root[data-theme='light'] .lightbox-counter {
+  color: #526b89;
+}
+:root[data-theme='light'] .lightbox-dot::before {
+  background: rgba(50, 80, 120, 0.3);
+}
+:root[data-theme='light'] .lightbox-dot[aria-pressed='true']::before {
+  background: #1769e8;
+  box-shadow: 0 0 12px rgba(23, 105, 232, 0.35);
+}
+:root[data-theme='light'] .photo-lightbox .lightbox-arrow,
+:root[data-theme='light'] .photo-lightbox .lightbox-close {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(50, 95, 155, 0.2);
+  color: #245a97;
+  box-shadow: 0 4px 16px rgba(35, 75, 120, 0.12);
+}
+:root[data-theme='light'] .photo-lightbox .lightbox-arrow:hover,
+:root[data-theme='light'] .photo-lightbox .lightbox-arrow:focus-visible,
+:root[data-theme='light'] .photo-lightbox .lightbox-close:hover,
+:root[data-theme='light'] .photo-lightbox .lightbox-close:focus-visible {
+  background: rgba(140, 190, 255, 0.45);
+  border-color: rgba(23, 105, 232, 0.45);
+  box-shadow: 0 0 24px rgba(23, 105, 232, 0.2);
+}
+.lightbox-info-tile:hover {
+  background-image: linear-gradient(135deg, rgba(125, 211, 252, 0.2) 0%, rgba(168, 85, 247, 0.12) 50%, rgba(34, 211, 238, 0.16) 100%);
+  border-color: rgba(125, 211, 252, 0.8);
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.4), inset 0 0 12px rgba(34, 211, 238, 0.15);
+  transform: translateY(-2px);
+}
+.lightbox-info-tile .lightbox-icon {
+  order: 0;
+  margin: 0;
+  color: #7dd3fc;
+  filter: drop-shadow(0 0 2px rgba(56, 189, 248, 0.5));
+}
+.lightbox-info-tile dt {
+  order: 1;
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0 0 4px;
+  padding: 0;
+  overflow: visible;
+  clip-path: none;
+  white-space: normal;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(186, 230, 253, 0.7);
 }
 .lightbox-icon {
   display: inline-flex;
@@ -87,19 +198,18 @@
   width: 21px;
   height: 21px;
 }
-.lightbox-value {
-  margin: 12px 0 0;
+.lightbox-info-tile .lightbox-value {
+  order: 2;
+  width: 100%;
+  margin: 0;
   color: #fff;
-  font-size: clamp(13px, 11cqi, 21px);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  font-size: clamp(1rem, 2vw, 1.2rem);
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.45;
+  text-align: left;
   overflow-wrap: anywhere;
   white-space: normal;
-}
-@container (max-width: 165px) {
-  .lightbox-value {
-    font-size: clamp(12px, 10cqi, 17px);
-  }
 }
 .lightbox-description {
   display: flex;
@@ -165,11 +275,18 @@
 }
 .photo-lightbox .lightbox-arrow,
 .photo-lightbox .lightbox-close {
-  background: #8fbaff0a;
-  border: 1px solid #ffffff14;
-  color: #c6ddff;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e0edff;
   backdrop-filter: blur(15px);
-  box-shadow: 0 0 15px #77aaff10;
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   transition:
     background 0.25s,
     border-color 0.25s,
@@ -177,10 +294,12 @@
     scale 0.25s;
 }
 .photo-lightbox .lightbox-arrow:hover,
-.photo-lightbox .lightbox-close:hover {
-  background: #82b1ff20;
-  border-color: #9bc5ff80;
-  box-shadow: 0 0 20px #71aaff40;
+.photo-lightbox .lightbox-arrow:focus-visible,
+.photo-lightbox .lightbox-close:hover,
+.photo-lightbox .lightbox-close:focus-visible {
+  background: rgba(70, 140, 255, 0.3);
+  border-color: rgba(160, 205, 255, 0.65);
+  box-shadow: 0 0 24px rgba(80, 150, 255, 0.35);
   scale: 1.08;
 }
 .visually-hidden {
@@ -202,7 +321,15 @@
     padding-inline: 55px;
   }
   .lightbox-info-tile {
-    padding: 14px;
+    padding: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-info-tile {
+    transition: none;
+  }
+  .lightbox-info-tile:hover {
+    transform: none;
   }
 }
 @media (max-width: 760px) {

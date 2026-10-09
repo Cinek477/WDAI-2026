@@ -6,6 +6,7 @@ window.portfolioPhotos = [
     category: 'concerts',
     shape: 'tall',
     src: 'assets/hobby/quebonafide-warszawa-2025-06-28.jpg',
+    glowColor: 'rgba(54, 22, 220, 0.65)',
     title: {
       pl: 'Ostatni Koncert Quebonafide - Warszawa PGE Narodowy',
       en: 'Quebonafide Final Concert - Warsaw PGE Narodowy',
@@ -45,9 +46,23 @@ window.portfolioPhotos = [
   {
     id: 'concert-2',
     category: 'concerts',
-    shape: 'wide',
-    src: null,
-    title: { pl: 'Koncert / kadr 05', en: 'Concert / frame 05' },
+    shape: 'tall',
+    src: 'assets/hobby/mata-warszawa-2026-05-16.jpg',
+    glowColor: 'rgba(220, 18, 64, 0.65)',
+    title: {
+      pl: 'Mata - Finał Mata2040 - PGE Narodowy - Warszawa',
+      en: 'Mata - Mata2040 Finale - PGE Narodowy - Warsaw',
+    },
+    artist: 'Mata',
+    event: { pl: 'Finał Mata2040', en: 'Mata2040 Finale' },
+    place: { pl: 'PGE Narodowy - Warszawa', en: 'PGE Narodowy - Warsaw' },
+    venue: 'PGE Narodowy',
+    city: { pl: 'Warszawa', en: 'Warsaw' },
+    date: '16.05.2026',
+    description: {
+      pl: 'Koncertowy kadr w czerwonym świetle sceny.',
+      en: 'A concert frame in the red stage light.',
+    },
   },
   {
     id: 'nature-2',

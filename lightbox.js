@@ -47,9 +47,15 @@
       const high = Math.max(r, g, b),
         low = Math.min(r, g, b);
       if (data[i + 3] < 128 || high < 35 || low > 235) continue;
-      const key = `${r >> 5},${g >> 5},${b >> 5}`;
+      const saturation = (high - low) / high;
+      if (saturation < 0.3) continue;
+      const difference = high - low;
+      let hue = high === r ? ((g - b) / difference) % 6
+        : high === g ? (b - r) / difference + 2 : (r - g) / difference + 4;
+      hue = (hue * 60 + 360) % 360;
+      const key = Math.floor(hue / 15);
       const bucket = buckets.get(key) || { weight: 0, r: 0, g: 0, b: 0 };
-      const weight = 1 + (high - low) / 128;
+      const weight = saturation ** 2 * Math.sqrt(high / 255);
       bucket.weight += weight;
       bucket.r += r * weight;
       bucket.g += g * weight;
@@ -80,7 +86,8 @@
 
   window.renderPortfolioLightbox = (photo, collection, select) => {
     const version = ++renderVersion;
-    dialog.style.setProperty('--dynamic-glow-color', 'rgba(98, 115, 220, 0.6)');
+    // Własny kolor zdjęcia działa również przy file://, gdzie canvas jest blokowany.
+    dialog.style.setProperty('--dynamic-glow-color', photo.glowColor || 'rgba(98, 115, 220, 0.6)');
     imageFrame.replaceChildren();
     if (photo.src) {
       const image = new Image();
@@ -94,7 +101,7 @@
           try {
             dialog.style.setProperty('--dynamic-glow-color', sampleGlow(image));
           } catch {
-            /* Pliki file:// i obrazy bez CORS zachowują bezpieczną poświatę domyślną. */
+            // Zachowaj kolor zapisany dla zdjęcia, zamiast wymuszać niebieską poświatę.
           }
         },
         { once: true },
