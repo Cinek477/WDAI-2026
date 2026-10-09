@@ -44,11 +44,11 @@ function metadata(photo) {
           ['artist', 'Artysta / Zespół', 'Artist / Band'],
           ['event', 'Wydarzenie / Trasa', 'Event / Tour'],
           ['place', 'Miejsce', 'Place'],
-          ['year', 'Rok', 'Year'],
+          ['date', 'Data', 'Date'],
         ]
       : [
           ['place', 'Miejsce', 'Place'],
-          ['year', 'Rok', 'Year'],
+          ['date', 'Data', 'Date'],
         ];
   fields.forEach(([key, pl, en]) => {
     const field = document.createElement('div');
@@ -83,6 +83,10 @@ function selectPhoto(photo) {
 }
 
 function renderLightbox() {
+  if (window.renderPortfolioLightbox) {
+    window.renderPortfolioLightbox(selectedPhoto, filteredPhotos, selectPhoto);
+    return;
+  }
   dialog.querySelector('.lightbox-image').replaceChildren(visual(selectedPhoto));
   dialog.querySelector('.lightbox-metadata').replaceChildren(metadata(selectedPhoto));
   dialog.querySelector('.lightbox-counter').textContent =

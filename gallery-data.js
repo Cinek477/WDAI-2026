@@ -1,12 +1,25 @@
 // Dodaj swoje zdjęcia: src: 'assets/hobby/nazwa-zdjecia.jpg'.
-// Metryczki są miejscami do uzupełnienia, a nie opisami prawdziwych wydarzeń.
+// Wpisy z src: null są miejscami na kolejne fotografie.
 window.portfolioPhotos = [
   {
     id: 'concert-1',
     category: 'concerts',
     shape: 'tall',
-    src: null,
-    title: { pl: 'Koncert / kadr 01', en: 'Concert / frame 01' },
+    src: 'assets/hobby/quebonafide-warszawa-2025-06-28.jpg',
+    title: {
+      pl: 'Ostatni Koncert Quebonafide - Warszawa PGE Narodowy',
+      en: 'Quebonafide Final Concert - Warsaw PGE Narodowy',
+    },
+    artist: 'Quebonafide',
+    event: { pl: 'Ostatni koncert', en: 'Final concert' },
+    place: { pl: 'PGE Narodowy - Warszawa', en: 'PGE Narodowy - Warsaw' },
+    venue: 'PGE Narodowy',
+    city: { pl: 'Warszawa', en: 'Warsaw' },
+    date: '28.06.2025',
+    description: {
+      pl: 'Finałowy koncert wśród świateł i unoszącego się konfetti.',
+      en: 'A final concert surrounded by lights and floating confetti.',
+    },
   },
   {
     id: 'nature-1',
@@ -58,5 +71,5 @@ window.portfolioPhotos = [
     title: { pl: 'Miejsca / kadr 08', en: 'Places / frame 08' },
   },
 ];
-// Opcjonalne pola każdego zdjęcia: artist, event, place, year, description.
+// Opcjonalne pola każdego zdjęcia: artist, event, place, date, description.
 // Teksty można podać jako { pl: '...', en: '...' } lub jako zwykły napis.
