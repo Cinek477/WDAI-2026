@@ -170,14 +170,14 @@ function createGalleryServer(options = {}) {
     });
     res.end(JSON.stringify(value));
   }
-  async function body(req) {
+  async function body(req, limit = MAX_BODY) {
     if (!(req.headers['content-type'] || '').startsWith('application/json'))
       throw Object.assign(new Error('Wymagany JSON.'), { status: 415 });
     let size = 0;
     const chunks = [];
     for await (const chunk of req) {
       size += chunk.length;
-      if (size > MAX_BODY)
+      if (size > limit)
         throw Object.assign(new Error('Plik jest za duży (limit żądania: 32 MB).'), {
           status: 413,
         });
@@ -294,6 +294,7 @@ function createGalleryServer(options = {}) {
     project.src = input.removeImage ? '' : old.src || '';
     return project;
   }
+  const inbox = require('./inbox.cjs').createInbox({ db, json, body, authenticated, options });
   const server = http.createServer(async (req, res) => {
     try {
       const url = new URL(req.url, 'http://localhost');
@@ -312,6 +313,7 @@ function createGalleryServer(options = {}) {
           if (!allowed.has(req.headers.origin))
             return json(res, 403, { error: 'Otwórz panel z lokalnego adresu serwera.' });
         }
+        if (await inbox(req, res, pathname)) return;
         if (pathname === '/api/auth/status' && req.method === 'GET') {
           return json(res, 200, {
             authenticated: authenticated(req),
@@ -515,6 +517,7 @@ function createGalleryServer(options = {}) {
 }
 
 if (require.main === module) {
+  if (fs.existsSync(path.join(ROOT, '.env'))) process.loadEnvFile(path.join(ROOT, '.env'));
   const server = createGalleryServer();
   const port = Number(process.env.PORT || 3000);
   server.listen(port, '127.0.0.1', () =>

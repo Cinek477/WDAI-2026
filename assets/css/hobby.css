@@ -196,97 +196,6 @@
     transform: translateY(0);
   }
 }
-.mobile-photo-details {
-  display: none;
-}
-.photo-metadata h3 {
-  margin: 0 0 18px;
-  font-size: 22px;
-}
-.photo-metadata dl {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin: 0;
-}
-.photo-metadata dt {
-  font-size: 11px;
-  color: var(--muted);
-  margin-bottom: 4px;
-}
-.photo-metadata dd {
-  margin: 0;
-  font-size: 14px;
-}
-.photo-metadata p {
-  font-size: 13px;
-  color: var(--muted);
-}
-.photo-lightbox {
-  width: min(1180px, calc(100% - 40px));
-  max-width: none;
-  max-height: calc(100dvh - 40px);
-  padding: 55px 60px 35px;
-  border: 1px solid var(--line);
-  border-radius: 28px;
-  background: var(--bg);
-  color: var(--text);
-  overflow-y: auto;
-}
-.photo-lightbox::backdrop {
-  background: #030b1bcc;
-  backdrop-filter: blur(12px);
-}
-.photo-lightbox[open] {
-  animation: lightbox-in 0.25s ease both;
-}
-.lightbox-content {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(230px, 1fr);
-  gap: 35px;
-  align-items: center;
-}
-.lightbox-image {
-  height: min(65dvh, 650px);
-  border-radius: 18px;
-  overflow: hidden;
-}
-.lightbox-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.lightbox-close {
-  position: absolute;
-  right: 14px;
-  top: 12px;
-}
-.lightbox-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
-.lightbox-prev {
-  left: 10px;
-}
-.lightbox-next {
-  right: 10px;
-}
-.lightbox-counter {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 20px;
-}
-@keyframes lightbox-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
 @media (max-width: 768px) {
   .hobby-hero .hero-heading h1 {
     font-size: clamp(32px, 8vw, 46px);
@@ -330,16 +239,7 @@
   .photo-card.selected .photo-caption {
     transform: translateY(0);
   }
-  .mobile-photo-details,
-  .mobile-photo-details.visible {
-    display: none;
-  }
   .gallery-toolbar {
     align-items: start;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .photo-lightbox[open] {
-    animation: none;
   }
 }

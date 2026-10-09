@@ -30,65 +30,46 @@ function applyLanguage(value) {
   const pageTitle = document.querySelector('[data-page-title]');
   document.title = `${pageTitle ? pageTitle.dataset[language] : 'Portfolio'} — Marcin Podyma`;
   savePreference('portfolio-language', language);
+  updateLogoLabel();
   document.dispatchEvent(new CustomEvent('portfolio-language-change'));
 }
-root.dataset.theme =
-  readPreference('portfolio-theme') ||
-  (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-themeButton.setAttribute('aria-pressed', String(root.dataset.theme === 'dark'));
-let themeTransitionRunning = false;
-themeButton.addEventListener('click', async () => {
-  if (themeTransitionRunning) return;
-  const change = () => {
-    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
-    themeButton.setAttribute('aria-pressed', String(root.dataset.theme === 'dark'));
-    savePreference('portfolio-theme', root.dataset.theme);
-  };
-  if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    change();
-    return;
-  }
-
-  // Fala zaczyna się na górze ekranu i dociera do obu dolnych narożników.
-  themeTransitionRunning = true;
-  const radius = Math.ceil(Math.hypot(innerWidth / 2, innerHeight));
-  const transition = document.startViewTransition(change);
-
-  try {
-    await transition.ready;
-    const animation = root.animate(
-      {
-        clipPath: [`circle(0px at 50% 0px)`, `circle(${radius}px at 50% 0px)`],
-      },
-      {
-        duration: 1100,
-        easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
-        pseudoElement: '::view-transition-new(root)',
-        fill: 'forwards',
-      },
-    );
-    await animation.finished;
-  } catch {
-    transition.skipTransition();
-  } finally {
-    await transition.finished.catch(() => {});
-    themeTransitionRunning = false;
-  }
-});
 document
   .querySelector('.language')
   .addEventListener('click', () => applyLanguage(language === 'pl' ? 'en' : 'pl'));
 applyLanguage(readPreference('portfolio-language') || 'pl');
+function updateLogoLabel() {
+  const mobile = matchMedia('(max-width: 760px)').matches;
+  const label = mobile
+    ? language === 'pl'
+      ? 'Otwórz menu'
+      : 'Open menu'
+    : language === 'pl'
+      ? 'Panel administratora'
+      : 'Admin panel';
+  menu.setAttribute('aria-label', label);
+  menu.title = label;
+  if (mobile) menu.setAttribute('aria-expanded', String(navbar.classList.contains('menu-open')));
+  else menu.removeAttribute('aria-expanded');
+}
 function closeMenu() {
   navbar.classList.remove('menu-open');
-  menu.setAttribute('aria-expanded', 'false');
+  updateLogoLabel();
 }
-menu.addEventListener('click', () => {
+let lastLogoTap = null;
+menu.addEventListener('click', (event) => {
   if (matchMedia('(max-width: 760px)').matches) {
+    const now = performance.now();
+    if (event.detail > 0 && lastLogoTap !== null && now - lastLogoTap < 450) {
+      lastLogoTap = null;
+      location.href = 'admin.html';
+      return;
+    }
+    lastLogoTap = event.detail > 0 ? now : null;
     const open = navbar.classList.toggle('menu-open');
     menu.setAttribute('aria-expanded', String(open));
   } else {
-    location.href = 'index.html';
+    lastLogoTap = null;
+    location.href = 'admin.html';
   }
 });
 document

@@ -6,11 +6,16 @@
     <title>Panel administratora — Marcin Podyma</title>
     <link rel="stylesheet" href="assets/css/portfolio.css" />
     <link rel="stylesheet" href="assets/css/admin.css" />
-    <script src="assets/js/admin-theme.js" defer></script>
+    <script src="assets/js/theme.js" defer></script>
     <script src="assets/js/admin.js" defer></script>
     <script src="assets/js/admin-projects.js" defer></script>
+    <script src="assets/js/admin-messages.js" defer></script>
   </head>
-  <body>
+  <body class="aurora-page">
+    <div class="aurora-bg" aria-hidden="true">
+      <div class="aurora-blob blob-1"></div>
+      <div class="aurora-blob blob-2"></div>
+    </div>
     <main class="admin-shell">
       <header class="admin-header">
         <div>
@@ -83,6 +88,9 @@
       <nav id="admin-tabs" class="admin-tabs" aria-label="Sekcje panelu" hidden>
         <button type="button" data-panel="gallery" aria-pressed="true">Galeria zdjęć</button>
         <button type="button" data-panel="projects" aria-pressed="false">Projekty</button>
+        <button type="button" data-panel="messages" aria-pressed="false">
+          Wiadomości <span id="messages-badge"></span>
+        </button>
       </nav>
       <div id="gallery-panel" class="admin-layout" hidden>
         <section class="admin-panel" aria-labelledby="form-title">
@@ -224,6 +232,18 @@
           <div id="project-list"></div>
         </section>
       </div>
+      <section id="messages-panel" class="admin-panel" aria-labelledby="messages-title" hidden>
+        <div class="inbox-header">
+          <h2 id="messages-title">Wiadomości</h2>
+          <button type="button" id="messages-refresh" class="subtle">Odśwież</button>
+        </div>
+        <p id="messages-config" class="admin-hint"></p>
+        <p class="admin-hint">
+          Najnowsze 100 wiadomości. Prywatne dane pozostają w lokalnej bazie i nie trafiają do
+          eksportu Git.
+        </p>
+        <div id="messages-list"></div>
+      </section>
     </main>
   </body>
 </html>

@@ -126,13 +126,4 @@
     }
   });
   document.querySelector('#project-cancel').addEventListener('click', reset);
-  document.querySelectorAll('[data-panel]').forEach((button) =>
-    button.addEventListener('click', () => {
-      document
-        .querySelectorAll('[data-panel]')
-        .forEach((tab) => tab.setAttribute('aria-pressed', String(tab === button)));
-      document.querySelector('#gallery-panel').hidden = button.dataset.panel !== 'gallery';
-      document.querySelector('#projects-panel').hidden = button.dataset.panel !== 'projects';
-    }),
-  );
 })();

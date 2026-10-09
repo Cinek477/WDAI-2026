@@ -1,18 +1,23 @@
 # Lokalny runtime Node.js, logi i pliki kontrolne
 /.local/
 
-# Lokalna baza SQLite (zdjęcia z assets/uploads są publikowane przez Git)
+# Lokalna baza: galeria, projekty, wiadomości i hasło administratora
 /data/
+/backups/
 *.sqlite
 *.sqlite-wal
 *.sqlite-shm
 *.sqlite-journal
+*.db
+*.db-wal
+*.db-shm
 
 # Zależności i cache narzędzi
 node_modules/
 .npm/
 .cache/
 coverage/
+.nyc_output/
 
 # Konfiguracja prywatna (szablon można dodać do repozytorium)
 .env
@@ -40,3 +45,5 @@ coverage/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Eksporty i zdjęcia publikujemy; nie obejmuj assets/uploads regułą ignorowania.

@@ -29,6 +29,8 @@ Portfolio łączy projekty i kompetencje z fotografią oraz zainteresowaniami po
 | :--- | :--- |
 | **Poświata dopasowana do zdjęcia** | Canvas analizuje kolorystykę fotografii i wybiera dominujący odcień do neonowej poświaty w lightboxie. Czerwone światło sceny daje inną aurę niż niebieskie. Wyniki są buforowane, a zapisany kolor stanowi wariant zapasowy. |
 | **Zmiana motywu jak fala** | Przejście między baby blue i navy blue rozchodzi się od góry ekranu dzięki View Transitions API. Ikona księżyca płynnie zmienia się w słońce. |
+| **Aurora w tle** | Powoli przesuwające się, rozmyte poświaty są widoczne na wszystkich podstronach i w panelu. Paleta dopasowuje się do jasnego baby blue i ciemnego granatu. |
+| **Kreator wiadomości** | Cztery kroki prowadzą od e-maila, przez temat i dopasowane szczegóły, do edytowalnej wiadomości. Lokalne API zapisuje ją w prywatnej skrzynce panelu. |
 | **Nawigacja zamieniająca się w wyspę** | Podczas przewijania na komputerze pasek skraca się do samych linków. Na telefonie logo otwiera animowane menu. |
 | **Galeria z poziomym przewijaniem** | Filtry pozwalają wybrać koncerty, naturę, ludzi lub miejsca. Powtarzane zestawy zdjęć tworzą wrażenie przewijania w pętli. |
 | **Swipe & Info Bottom** | Na telefonie otwarte zdjęcia tworzą karuzelę ze scroll snap. Paginacja i szczegóły znajdują się pod fotografią oraz aktualizują po przesunięciu. |
@@ -75,7 +77,9 @@ Serwer nasłuchuje na `127.0.0.1`. Zatrzymasz go przez **Ctrl + C** w terminalu.
 
 ## 🛠️ Panel administratora
 
-Przy pierwszym wejściu ustaw własne hasło dla loginu **`admin`** — minimum 10 znaków. Następnie wybierz jedną z dwóch zakładek:
+Na komputerze panel otwiera kliknięcie logo. Na telefonie stuknij logo dwukrotnie; pojedyncze stuknięcie rozwija menu.
+
+Przy pierwszym wejściu ustaw własne hasło dla loginu **`admin`** — minimum 10 znaków. Panel ma zakładki **Galeria zdjęć**, **Projekty** i **Wiadomości**:
 
 | Galeria zdjęć | Projekty |
 | :--- | :--- |
@@ -87,7 +91,9 @@ Przy pierwszym wejściu ustaw własne hasło dla loginu **`admin`** — minimum 
 
 Hasło jest przechowywane jako skrót **scrypt z losową solą**. Sesja używa ciasteczka `HttpOnly` i `SameSite=Strict`, trwa do 8 godzin i wygasa po restarcie serwera. Operacje zmieniające dane wymagają logowania oraz zgodnego nagłówka `Origin`.
 
-Panel i API służą do pracy lokalnej. Na hostingu statycznym można przeglądać wyeksportowane treści; zarządzanie nimi odbywa się przez lokalny serwer.
+Zakładka **Wiadomości** pokazuje zgłoszenia z kreatora kontaktowego, licznik nieprzeczytanych oraz status powiadomienia pocztowego. Treść wiadomości pozostaje prywatna i nie trafia do eksportów ani Git. Powiadomienia e-mail wymagają lokalnej konfiguracji `.env`; instrukcja znajduje się w [CONTACT-MESSAGES.md](CONTACT-MESSAGES.md).
+
+Panel i API służą do pracy lokalnej. Na hostingu statycznym można przeglądać wyeksportowane treści; zarządzanie nimi oraz przyjmowanie wiadomości odbywa się przez lokalny serwer.
 
 <a id="publikacja"></a>
 
@@ -119,9 +125,12 @@ Baza w `data/`, hasło administratora oraz lokalny runtime w `.local/` są wyklu
 ├── index.html              # Portfolio: projekty i kompetencje
 ├── knowledge.html          # Korepetycje
 ├── hobby.html              # Hobby, galeria i lightbox
-├── contact.html            # Kontakt
-├── admin.html              # Panel: galeria + projekty
+├── contact.html            # Kontakt i kreator wiadomości
+├── kontakt.html            # Przekierowanie do contact.html
+├── admin.html              # Panel: galeria, projekty, wiadomości
 ├── server.cjs              # Lokalny serwer, API i SQLite
+├── inbox.cjs               # Prywatna skrzynka i powiadomienia e-mail
+├── .env.example            # Szablon lokalnej konfiguracji poczty
 ├── assets/
 │   ├── css/                # Style podstron i komponentów
 │   ├── js/                 # Interakcje, panel i eksporty danych
@@ -140,8 +149,8 @@ npm run check
 npm test
 ```
 
-- `check` sprawdza składnię JavaScript, odnośniki, kotwice, identyfikatory HTML i pliki zdjęć galerii.
-- `test` weryfikuje zapis i trwałość danych, eksporty, logowanie, kontrolę dostępu oraz operacje na zdjęciach i projektach. Testy korzystają z osobnych, tymczasowych baz.
+- `check` sprawdza składnię JavaScript i modułów serwera, odnośniki, kotwice, identyfikatory HTML, konfigurację JSON oraz eksporty i zdjęcia galerii i projektów.
+- `test` weryfikuje zapis i trwałość danych, eksporty, logowanie, kontrolę dostępu, operacje na zdjęciach i projektach oraz skrzynkę wiadomości, ponawianie powiadomień i limity zgłoszeń. Testy korzystają z osobnych, tymczasowych baz; powiadomienia pocztowe w teście skrzynki są symulowane.
 
 Zasady formatowania znajdują się w [.editorconfig](.editorconfig) i [.prettierrc.json](.prettierrc.json).
 

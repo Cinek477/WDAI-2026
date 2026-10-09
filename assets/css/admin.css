@@ -214,6 +214,9 @@ button.admin-link {
   object-fit: cover;
   border-radius: 12px;
 }
+.admin-photo:not(:has(> img)) {
+  grid-template-columns: 1fr;
+}
 .admin-photo h3 {
   font-size: 14px;
   line-height: 1.4;
@@ -248,4 +251,46 @@ button.admin-link {
   .form-row {
     grid-template-columns: 1fr;
   }
+}
+.inbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.inbox-header h2 {
+  margin: 0;
+}
+.inbox-message {
+  margin-top: 18px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+.inbox-message.unread {
+  border-color: var(--accent);
+  background: rgba(123, 181, 255, 0.06);
+}
+.inbox-message h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.inbox-message > a {
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+.inbox-message time {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.inbox-content {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.inbox-message .admin-link {
+  padding: 8px 12px;
+  font-size: 13px;
 }

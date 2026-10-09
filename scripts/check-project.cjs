@@ -53,11 +53,13 @@ function validateScripts(directory) {
 }
 for (const directory of ['assets/js', 'scripts', 'tests'])
   validateScripts(path.join(root, directory));
-try {
-  new vm.Script(Module.wrap(fs.readFileSync(path.join(root, 'server.cjs'), 'utf8')));
-  checked++;
-} catch (error) {
-  failures.push(`server.cjs: ${error.message}`);
+for (const file of fs.readdirSync(root).filter((file) => file.endsWith('.cjs'))) {
+  try {
+    new vm.Script(Module.wrap(fs.readFileSync(path.join(root, file), 'utf8')));
+    checked++;
+  } catch (error) {
+    failures.push(`${file}: ${error.message}`);
+  }
 }
 const data = { window: {} };
 vm.runInNewContext(fs.readFileSync(path.join(root, 'assets/js/gallery-data.js'), 'utf8'), data);
@@ -67,6 +69,32 @@ if (new Set(photos.map((photo) => photo.id)).size !== photos.length)
 for (const photo of photos)
   if (photo.src && !fs.existsSync(path.join(root, photo.src)))
     failures.push(`Brak zdjęcia: ${photo.src}`);
+try {
+  const projectData = { window: {} };
+  vm.runInNewContext(
+    fs.readFileSync(path.join(root, 'assets/js/projects-data.js'), 'utf8'),
+    projectData,
+  );
+  const projects = projectData.window.portfolioProjects;
+  if (!Array.isArray(projects)) throw new Error('Niepoprawny eksport projektów.');
+  if (new Set(projects.map((project) => project.id)).size !== projects.length)
+    failures.push('Powtórzone identyfikatory projektów.');
+  for (const project of projects) {
+    if (!['achievements', 'projects'].includes(project.section))
+      failures.push(`Niepoprawna sekcja projektu: ${project.id}`);
+    if (project.src && !fs.existsSync(path.join(root, project.src)))
+      failures.push(`Brak zdjęcia projektu: ${project.src}`);
+  }
+} catch (error) {
+  failures.push(error.message);
+}
+for (const file of ['package.json', '.prettierrc.json']) {
+  try {
+    JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
+  } catch (error) {
+    failures.push(`${file}: ${error.message}`);
+  }
+}
 if (failures.length) {
   console.error(failures.join('\n'));
   process.exitCode = 1;

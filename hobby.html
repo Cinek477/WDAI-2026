@@ -12,12 +12,17 @@
     <link rel="stylesheet" href="assets/css/portfolio.css" />
     <link rel="stylesheet" href="assets/css/hobby.css" />
     <link rel="stylesheet" href="assets/css/lightbox.css" />
+    <script src="assets/js/theme.js" defer></script>
     <script src="assets/js/portfolio.js" defer></script>
     <script src="assets/js/gallery-data.js" defer></script>
-    <script src="assets/js/gallery.js" defer></script>
     <script src="assets/js/lightbox.js" defer></script>
+    <script src="assets/js/gallery.js" defer></script>
   </head>
-  <body>
+  <body class="aurora-page">
+    <div class="aurora-bg" aria-hidden="true">
+      <div class="aurora-blob blob-1"></div>
+      <div class="aurora-blob blob-2"></div>
+    </div>
     <header class="navbar">
       <button
         class="logo"
@@ -226,7 +231,6 @@
           data-label-pl="Galeria fotografii"
           data-label-en="Photo gallery"
         ></div>
-        <div class="mobile-photo-details"><div></div></div>
         <small
           class="hobby-note"
           data-pl="Kolejne fotografie pojawią się wkrótce — puste pola czekają na nowe kadry."
@@ -298,9 +302,6 @@
     </a>
     <footer>
       <span>© 2026 Marcin Podyma.</span>
-      <a class="admin-entry" href="admin.html" data-pl="Panel admina" data-en="Admin login"
-        >Panel admina</a
-      >
       <div class="socials" aria-label="Social media">
         <svg width="0" height="0" aria-hidden="true" style="position: absolute">
           <defs>

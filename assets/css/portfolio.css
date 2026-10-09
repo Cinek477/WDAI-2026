@@ -43,6 +43,80 @@ body {
     sans-serif;
   line-height: 1.65;
 }
+.aurora-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  --card: rgba(245, 250, 255, 0.78);
+  --aurora-blue: #c3e3ff;
+  --aurora-secondary: #a3cdff;
+  --aurora-opacity: 0.5;
+}
+:root[data-theme='dark'] .aurora-page {
+  --card: rgba(16, 32, 57, 0.78);
+  --aurora-blue: #164ea6;
+  --aurora-secondary: #19385f;
+  --aurora-opacity: 0.36;
+}
+.aurora-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg);
+}
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: var(--aurora-opacity);
+}
+.blob-1 {
+  width: max(600px, 65vw);
+  height: max(600px, 80vh);
+  background: var(--aurora-blue);
+  top: -10%;
+  left: -10%;
+  animation: float-blob-1 20s infinite alternate ease-in-out;
+}
+.blob-2 {
+  width: max(500px, 60vw);
+  height: max(500px, 75vh);
+  background: var(--aurora-secondary);
+  bottom: -10%;
+  right: -10%;
+  animation: float-blob-2 25s infinite alternate-reverse ease-in-out;
+}
+.aurora-page .card,
+.aurora-page .admin-panel {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+@keyframes float-blob-1 {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(30vw, 20vh) scale(1.2);
+  }
+}
+@keyframes float-blob-2 {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(-30vw, -20vh) scale(1.1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob {
+    animation: none;
+  }
+}
 button,
 a {
   -webkit-tap-highlight-color: transparent;
@@ -66,6 +140,9 @@ button {
 ::selection {
   background: #93c5fd;
   color: #092242;
+}
+.logo {
+  touch-action: manipulation;
 }
 .navbar {
   position: fixed;
@@ -527,14 +604,6 @@ footer {
 .socials {
   display: flex;
   gap: 18px;
-}
-.admin-entry {
-  color: var(--muted);
-  font-size: 12px;
-  padding: 8px 0;
-}
-.admin-entry:hover {
-  color: var(--accent);
 }
 .social {
   display: grid;

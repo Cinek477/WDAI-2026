@@ -14,8 +14,7 @@
   }
   const track = document.querySelector('.gallery-track');
   const dialog = document.querySelector('.photo-lightbox');
-  const mobileDetails = document.querySelector('.mobile-photo-details');
-  const mobileQuery = matchMedia('(max-width: 760px)');
+  const mobileQuery = matchMedia('(max-width: 768px)');
   let filteredPhotos = [...photos];
   let selectedPhoto = null;
   let scrollFrame = 0;
@@ -44,43 +43,6 @@
     return placeholder;
   }
 
-  function metadata(photo) {
-    const container = document.createElement('div');
-    container.className = 'photo-metadata';
-    const heading = document.createElement('h3');
-    heading.textContent = text(photo.title);
-    container.append(heading);
-    const list = document.createElement('dl');
-    const fields =
-      photo.category === 'concerts'
-        ? [
-            ['artist', 'Artysta / Zespół', 'Artist / Band'],
-            ['event', 'Wydarzenie / Trasa', 'Event / Tour'],
-            ['place', 'Miejsce', 'Place'],
-            ['date', 'Data', 'Date'],
-          ]
-        : [['place', 'Miejsce', 'Place']];
-    fields.forEach(([key, pl, en]) => {
-      const field = document.createElement('div');
-      const label = document.createElement('dt');
-      const value = document.createElement('dd');
-      label.textContent = translated(pl, en);
-      value.textContent = text(photo[key]) || translated('Do uzupełnienia', 'To be added');
-      field.append(label, value);
-      list.append(field);
-    });
-    const description = document.createElement('p');
-    description.textContent =
-      text(photo.description) ||
-      translated(
-        'Tutaj pojawi się opis tego kadru.',
-        'A description of this frame will appear here.',
-      );
-    container.append(list);
-    if (photo.category === 'concerts' || text(photo.description)) container.append(description);
-    return container;
-  }
-
   function selectPhoto(photo) {
     selectedPhoto = photo;
     track.querySelectorAll('.photo-card').forEach((card) => {
@@ -88,20 +50,11 @@
       card.classList.toggle('selected', active);
       card.setAttribute('aria-pressed', String(active));
     });
-    mobileDetails.firstElementChild.replaceChildren(metadata(photo));
-    mobileDetails.classList.add('visible');
     if (dialog.open) renderLightbox();
   }
 
   function renderLightbox() {
-    if (window.renderPortfolioLightbox) {
-      window.renderPortfolioLightbox(selectedPhoto, filteredPhotos, selectPhoto);
-      return;
-    }
-    dialog.querySelector('.lightbox-image').replaceChildren(visual(selectedPhoto));
-    dialog.querySelector('.lightbox-metadata').replaceChildren(metadata(selectedPhoto));
-    dialog.querySelector('.lightbox-counter').textContent =
-      `${filteredPhotos.indexOf(selectedPhoto) + 1} / ${filteredPhotos.length}`;
+    window.renderPortfolioLightbox(selectedPhoto, filteredPhotos, selectPhoto);
   }
 
   function openPhoto(photo, button) {
@@ -123,7 +76,6 @@
       );
       track.append(empty);
       selectedPhoto = null;
-      mobileDetails.classList.remove('visible');
       return;
     }
     // Trzy identyczne cykle pozwalają przewijać w obie strony bez końca.
@@ -151,7 +103,6 @@
     if (selectedPhoto && filteredPhotos.includes(selectedPhoto)) selectPhoto(selectedPhoto);
     else {
       selectedPhoto = null;
-      mobileDetails.classList.remove('visible');
     }
     selectCentralPhoto();
   }

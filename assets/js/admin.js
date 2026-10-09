@@ -229,6 +229,17 @@ form.addEventListener('submit', async (event) => {
 });
 document.querySelector('#cancel').addEventListener('click', resetForm);
 const loginForm = document.querySelector('#login-form');
+document.querySelectorAll('[data-panel]').forEach((button) =>
+  button.addEventListener('click', () => {
+    document.querySelectorAll('[data-panel]').forEach((tab) => {
+      const active = tab === button;
+      tab.setAttribute('aria-pressed', String(active));
+      document.querySelector(`#${tab.dataset.panel}-panel`).hidden = !active;
+    });
+    if (button.dataset.panel === 'messages' && window.loadAdminMessages)
+      window.loadAdminMessages().catch((error) => status(error.message, true));
+  }),
+);
 let requiresSetup = false;
 async function refreshAuth() {
   const auth = await api('/api/auth/status');
@@ -241,14 +252,20 @@ async function refreshAuth() {
     !auth.authenticated ||
     document.querySelector('[data-panel="projects"]').getAttribute('aria-pressed') !== 'true';
   document.querySelector('#auth-panel').hidden = auth.authenticated;
+  document.querySelector('#messages-panel').hidden =
+    !auth.authenticated ||
+    document.querySelector('[data-panel="messages"]').getAttribute('aria-pressed') !== 'true';
   document.querySelector('#logout').hidden = !auth.authenticated;
   if (auth.authenticated) {
     await loadPhotos();
     if (window.loadAdminProjects) await window.loadAdminProjects();
+    if (window.loadAdminMessages) await window.loadAdminMessages();
     return;
   }
   document.querySelector('#photo-list').replaceChildren();
   document.querySelector('#project-list').replaceChildren();
+  document.querySelector('#messages-list').replaceChildren();
+  document.querySelector('#messages-badge').textContent = '';
   document.querySelector('#auth-title').textContent = requiresSetup
     ? 'Ustaw swoje hasło'
     : 'Zaloguj się';
