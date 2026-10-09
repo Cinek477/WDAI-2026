@@ -1,0 +1,10 @@
+{
+  "name": "marcin-portfolio",
+  "private": true,
+  "scripts": {
+    "start": "node server.cjs",
+    "check": "node scripts/check-project.cjs",
+    "test": "node --test tests/*.test.cjs"
+  },
+  "engines": { "node": ">=24" }
+}

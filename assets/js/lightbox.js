@@ -1,7 +1,14 @@
 // Renderowanie modalu; nawigacja klawiaturą i cykl galerii pozostają w gallery.js.
 (() => {
   const dialog = document.querySelector('.photo-lightbox');
-  const imageFrame = dialog.querySelector('.lightbox-image');
+  const carousel = dialog.querySelector('.lightbox-carousel');
+  const mobile = matchMedia('(max-width: 768px)');
+  let activePhoto;
+  let activeCollection = [];
+  let selectPhoto;
+  let collectionKey = '';
+  let swiping = false;
+  let scrollTimer;
   const information = dialog.querySelector('.lightbox-metadata');
   const counter = dialog.querySelector('.lightbox-counter');
   const dots = document.createElement('div');
@@ -32,7 +39,6 @@
     return wrapper;
   }
   const colorCache = new Map();
-  let renderVersion = 0;
 
   function sampleGlow(image) {
     if (colorCache.has(image.src)) return colorCache.get(image.src);
@@ -50,8 +56,12 @@
       const saturation = (high - low) / high;
       if (saturation < 0.3) continue;
       const difference = high - low;
-      let hue = high === r ? ((g - b) / difference) % 6
-        : high === g ? (b - r) / difference + 2 : (r - g) / difference + 4;
+      let hue =
+        high === r
+          ? ((g - b) / difference) % 6
+          : high === g
+            ? (b - r) / difference + 2
+            : (r - g) / difference + 4;
       hue = (hue * 60 + 360) % 360;
       const key = Math.floor(hue / 15);
       const bucket = buckets.get(key) || { weight: 0, r: 0, g: 0, b: 0 };
@@ -85,34 +95,70 @@
   new ResizeObserver(() => requestAnimationFrame(fitText)).observe(information);
 
   window.renderPortfolioLightbox = (photo, collection, select) => {
-    const version = ++renderVersion;
+    activePhoto = photo;
+    activeCollection = collection;
+    selectPhoto = select;
     // Własny kolor zdjęcia działa również przy file://, gdzie canvas jest blokowany.
     dialog.style.setProperty('--dynamic-glow-color', photo.glowColor || 'rgba(98, 115, 220, 0.6)');
-    imageFrame.replaceChildren();
-    if (photo.src) {
-      const image = new Image();
-      image.alt = local(photo.title);
-      image.decoding = 'async';
-      if (location.protocol !== 'file:') image.crossOrigin = 'anonymous';
-      image.addEventListener(
-        'load',
-        () => {
-          if (version !== renderVersion) return;
-          try {
-            dialog.style.setProperty('--dynamic-glow-color', sampleGlow(image));
-          } catch {
-            // Zachowaj kolor zapisany dla zdjęcia, zamiast wymuszać niebieską poświatę.
-          }
-        },
-        { once: true },
+    const key = JSON.stringify(collection.map((item) => [item.id, item.src]));
+    if (key !== collectionKey) {
+      collectionKey = key;
+      carousel.replaceChildren();
+      collection.forEach((item) => {
+        const imageFrame = document.createElement('div');
+        imageFrame.className = 'lightbox-image';
+        imageFrame.style.setProperty(
+          '--dynamic-glow-color',
+          item.glowColor || 'rgba(98, 115, 220, 0.6)',
+        );
+        carousel.append(imageFrame);
+        if (item.src) {
+          const image = new Image();
+          image.alt = local(item.title);
+          image.decoding = 'async';
+          if (location.protocol !== 'file:') image.crossOrigin = 'anonymous';
+          image.addEventListener(
+            'load',
+            () => {
+              try {
+                const color = sampleGlow(image);
+                imageFrame.style.setProperty('--dynamic-glow-color', color);
+                if (activePhoto === item) dialog.style.setProperty('--dynamic-glow-color', color);
+              } catch {
+                // Zachowaj kolor zapisany dla zdjęcia, zamiast wymuszać niebieską poświatę.
+              }
+            },
+            { once: true },
+          );
+          image.src = item.src;
+          imageFrame.append(image);
+        } else {
+          const placeholder = document.createElement('div');
+          placeholder.className = 'photo-placeholder';
+          placeholder.textContent = translate('Miejsce na zdjęcie', 'Photo placeholder');
+          imageFrame.append(placeholder);
+        }
+      });
+    }
+    const selectedIndex = collection.indexOf(photo);
+    [...carousel.children].forEach((frame, index) => {
+      frame.classList.toggle('is-active', index === selectedIndex);
+      const image = frame.querySelector('img');
+      if (image) image.alt = local(collection[index].title);
+    });
+    const selectedFrame = carousel.children[selectedIndex];
+    if (selectedFrame) {
+      dialog.style.setProperty(
+        '--dynamic-glow-color',
+        selectedFrame.style.getPropertyValue('--dynamic-glow-color'),
       );
-      image.src = photo.src;
-      imageFrame.append(image);
-    } else {
-      const placeholder = document.createElement('div');
-      placeholder.className = 'photo-placeholder';
-      placeholder.textContent = translate('Miejsce na zdjęcie', 'Photo placeholder');
-      imageFrame.append(placeholder);
+      if (!swiping && mobile.matches)
+        requestAnimationFrame(() => {
+          const frameRect = selectedFrame.getBoundingClientRect();
+          const trackRect = carousel.getBoundingClientRect();
+          carousel.scrollLeft +=
+            frameRect.left + frameRect.width / 2 - trackRect.left - carousel.clientWidth / 2;
+        });
     }
 
     information.replaceChildren();
@@ -125,22 +171,32 @@
       places: ['Miejsca', 'Places'],
     };
     const category = categories[photo.category] || ['Fotografia', 'Photography'];
-    [translate(...category), local(photo.city)].filter(Boolean).forEach((label) => {
-      const badge = document.createElement('span');
-      badge.textContent = label;
-      badges.append(badge);
-    });
+    [translate(...category), photo.category === 'concerts' ? local(photo.city) : '']
+      .filter(Boolean)
+      .forEach((label) => {
+        const badge = document.createElement('span');
+        badge.textContent = label;
+        badges.append(badge);
+      });
     const heading = document.createElement('h2');
     heading.id = 'lightbox-title';
-    heading.textContent = local(photo.artist) || local(photo.title);
+    const concert = photo.category === 'concerts';
+    if (!concert) heading.className = 'visually-hidden';
+    heading.textContent = concert
+      ? local(photo.artist) || local(photo.title)
+      : local(photo.place) || local(photo.venue);
     const grid = document.createElement('dl');
     grid.className = 'lightbox-info-grid';
-    [
-      ['artist', 'Artysta', 'Artist'],
-      ['event', 'Wydarzenie', 'Event'],
-      ['venue', 'Miejsce', 'Venue'],
-      ['date', 'Data', 'Date'],
-    ].forEach(([key, pl, en]) => {
+    if (!concert) grid.classList.add('is-simple');
+    const fields = concert
+      ? [
+          ['artist', 'Artysta', 'Artist'],
+          ['event', 'Wydarzenie', 'Event'],
+          ['venue', 'Miejsce', 'Venue'],
+          ['date', 'Data', 'Date'],
+        ]
+      : [['venue', 'Miejsce', 'Venue']];
+    fields.forEach(([key, pl, en]) => {
       const tile = document.createElement('div');
       tile.className = 'lightbox-info-tile';
       const label = document.createElement('dt');
@@ -148,7 +204,12 @@
       label.textContent = translate(pl, en);
       const value = document.createElement('dd');
       value.className = 'lightbox-value';
-      value.textContent = local(photo[key] || (key === 'venue' ? photo.place : '')) || '—';
+      value.textContent =
+        local(
+          !concert
+            ? photo.place || photo.venue
+            : photo[key] || (key === 'venue' ? photo.place : ''),
+        ) || '—';
       tile.append(label, icon(key), value);
       grid.append(tile);
     });
@@ -159,7 +220,11 @@
       local(photo.description) ||
       translate('Opis tego kadru pojawi się wkrótce.', 'More about this frame coming soon.');
     description.append(icon('info'), sentence);
-    information.append(badges, heading, grid, description);
+    if (concert) information.append(badges, heading, grid, description);
+    else {
+      information.append(badges, heading, grid);
+      if (local(photo.description)) information.append(description);
+    }
 
     const index = collection.indexOf(photo);
     counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(collection.length).padStart(2, '0')}`;
@@ -180,4 +245,31 @@
     });
     requestAnimationFrame(fitText);
   };
+  carousel.addEventListener(
+    'scroll',
+    () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        if (!dialog.open || !mobile.matches) return;
+        const trackRect = carousel.getBoundingClientRect();
+        const center = trackRect.left + carousel.clientWidth / 2;
+        const frames = [...carousel.children];
+        const closest = frames.reduce(
+          (best, frame) => {
+            const rect = frame.getBoundingClientRect();
+            const distance = Math.abs(rect.left + rect.width / 2 - center);
+            return distance < best.distance ? { frame, distance } : best;
+          },
+          { frame: null, distance: Infinity },
+        );
+        const photo = activeCollection[frames.indexOf(closest.frame)];
+        if (photo && photo !== activePhoto) {
+          swiping = true;
+          selectPhoto(photo);
+          swiping = false;
+        }
+      }, 100);
+    },
+    { passive: true },
+  );
 })();

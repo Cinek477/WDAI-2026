@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panel administratora — Marcin Podyma</title>
+    <link rel="stylesheet" href="assets/css/portfolio.css" />
+    <link rel="stylesheet" href="assets/css/admin.css" />
+    <script src="assets/js/admin-theme.js" defer></script>
+    <script src="assets/js/admin.js" defer></script>
+    <script src="assets/js/admin-projects.js" defer></script>
+  </head>
+  <body>
+    <main class="admin-shell">
+      <header class="admin-header">
+        <div>
+          <p class="eyebrow">Panel lokalny / Portfolio</p>
+          <h1>Twoje portfolio.</h1>
+        </div>
+        <div class="admin-header-actions">
+          <button
+            class="theme"
+            type="button"
+            aria-label="Zmień motyw"
+            aria-pressed="false"
+            title="Zmień motyw"
+          >
+            <svg
+              class="moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              aria-hidden="true"
+            >
+              <path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z" />
+            </svg>
+            <svg
+              class="sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2" />
+            </svg>
+          </button>
+          <a class="admin-link" href="hobby.html">Otwórz galerię ↗</a>
+          <a class="admin-link" href="index.html#projects">Otwórz projekty ↗</a>
+          <button id="logout" class="admin-link" type="button" hidden>Wyloguj się</button>
+        </div>
+      </header>
+      <p id="status" class="admin-status" role="status" aria-live="polite"></p>
+      <section id="auth-panel" class="admin-panel auth-panel" aria-labelledby="auth-title" hidden>
+        <p class="eyebrow">Dostęp administratora</p>
+        <h2 id="auth-title">Zaloguj się</h2>
+        <p id="auth-description" class="admin-hint">Wpisz login i hasło, aby zarządzać galerią.</p>
+        <form id="login-form">
+          <label
+            >Login<input name="username" value="admin" autocomplete="username" readonly
+          /></label>
+          <label
+            >Hasło<input
+              name="password"
+              type="password"
+              required
+              minlength="10"
+              maxlength="128"
+              autocomplete="current-password"
+          /></label>
+          <label id="confirm-password-label" hidden
+            >Powtórz hasło<input
+              name="confirmPassword"
+              type="password"
+              maxlength="128"
+              autocomplete="new-password"
+          /></label>
+          <button id="login-submit" type="submit">Zaloguj się</button>
+        </form>
+      </section>
+      <nav id="admin-tabs" class="admin-tabs" aria-label="Sekcje panelu" hidden>
+        <button type="button" data-panel="gallery" aria-pressed="true">Galeria zdjęć</button>
+        <button type="button" data-panel="projects" aria-pressed="false">Projekty</button>
+      </nav>
+      <div id="gallery-panel" class="admin-layout" hidden>
+        <section class="admin-panel" aria-labelledby="form-title">
+          <h2 id="form-title">Dodaj zdjęcie</h2>
+          <form id="photo-form">
+            <label
+              >Zdjęcie (JPG, PNG, WebP)<input
+                name="image"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                required
+            /></label>
+            <img id="preview" alt="Podgląd wybranego zdjęcia" hidden />
+            <label
+              >Tytuł<input
+                name="title"
+                maxlength="500"
+                required
+                placeholder="Mata — Finał Mata2040"
+            /></label>
+            <div class="form-row">
+              <label
+                >Kategoria<select name="category">
+                  <option value="concerts">Koncerty</option>
+                  <option value="nature">Natura</option>
+                  <option value="people">Ludzie</option>
+                  <option value="places">Miejsca</option>
+                </select></label
+              >
+              <label
+                >Format<select name="shape">
+                  <option value="tall">Pionowy</option>
+                  <option value="wide">Poziomy</option>
+                  <option value="regular">Kwadratowy</option>
+                </select></label
+              >
+            </div>
+            <label>Artysta<input name="artist" maxlength="500" placeholder="Mata" /></label>
+            <label
+              >Wydarzenie<input name="event" maxlength="500" placeholder="Finał Mata2040"
+            /></label>
+            <div class="form-row">
+              <label>Miejsce<input name="venue" maxlength="500" placeholder="PGE Narodowy" /></label
+              ><label>Miasto<input name="city" maxlength="500" placeholder="Warszawa" /></label>
+            </div>
+            <label>Data<input name="date" type="date" /></label>
+            <label
+              >Krótki opis<textarea
+                name="description"
+                rows="3"
+                maxlength="2000"
+                placeholder="Jedno zdanie o tym kadrze."
+              ></textarea>
+            </label>
+            <details>
+              <summary>Teksty w wersji angielskiej (opcjonalnie)</summary>
+              <label>Tytuł EN<input name="titleEn" maxlength="500" /></label
+              ><label>Wydarzenie EN<input name="eventEn" maxlength="500" /></label
+              ><label>Miasto EN<input name="cityEn" maxlength="500" /></label
+              ><label
+                >Opis EN<textarea name="descriptionEn" rows="2" maxlength="2000"></textarea>
+              </label>
+            </details>
+            <p class="admin-hint">
+              Poświata zostanie pobrana ze zdjęcia. Nowe zdjęcia zapisujemy w rozmiarze do 2400 px.
+            </p>
+            <div class="form-actions">
+              <button id="save" type="submit">Zapisz zdjęcie</button
+              ><button id="cancel" type="button" class="subtle" hidden>Anuluj edycję</button>
+            </div>
+          </form>
+        </section>
+        <section class="admin-panel" aria-labelledby="list-title">
+          <h2 id="list-title">Zdjęcia w galerii <span id="count"></span></h2>
+          <div id="photo-list"></div>
+        </section>
+      </div>
+      <div id="projects-panel" class="admin-layout" hidden>
+        <section class="admin-panel" aria-labelledby="project-form-title">
+          <h2 id="project-form-title">Dodaj projekt</h2>
+          <form id="project-form">
+            <label>Tytuł<input name="title" required maxlength="500" /></label>
+            <div class="form-row">
+              <label
+                >Sekcja<select name="section">
+                  <option value="projects">Aktualne projekty</option>
+                  <option value="achievements">Projekty i kompetencje</option>
+                </select></label
+              >
+              <label
+                >Rok<input name="year" type="number" min="1900" max="2100" value="2026" required
+              /></label>
+            </div>
+            <label>Krótki opis<input name="summary" maxlength="500" /></label>
+            <label
+              >Pełny opis<textarea name="description" rows="5" maxlength="5000"></textarea>
+            </label>
+            <label
+              >Technologie<input
+                name="technologies"
+                maxlength="500"
+                placeholder="Java, PostgreSQL, …"
+            /></label>
+            <label
+              >Link do projektu<input
+                name="link"
+                maxlength="2000"
+                placeholder="https://github.com/…"
+            /></label>
+            <label>Symbol kafelka<input name="symbol" maxlength="20" value="↗" /></label>
+            <label
+              >Zdjęcie (opcjonalnie)<input
+                name="image"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+            /></label>
+            <img id="project-preview" alt="Podgląd zdjęcia projektu" hidden />
+            <label id="project-remove-image-label" hidden
+              ><input name="removeImage" type="checkbox" /> Usuń obecne zdjęcie</label
+            >
+            <details>
+              <summary>Wersja angielska (opcjonalnie)</summary>
+              <label>Tytuł EN<input name="titleEn" maxlength="500" /></label>
+              <label>Krótki opis EN<input name="summaryEn" maxlength="500" /></label>
+              <label
+                >Pełny opis EN<textarea name="descriptionEn" rows="5" maxlength="5000"></textarea>
+              </label>
+            </details>
+            <div class="form-actions">
+              <button type="submit" id="project-save">Zapisz projekt</button
+              ><button type="button" class="subtle" id="project-cancel" hidden>
+                Anuluj edycję
+              </button>
+            </div>
+          </form>
+        </section>
+        <section class="admin-panel" aria-labelledby="project-list-title">
+          <h2 id="project-list-title">Projekty <span id="project-count"></span></h2>
+          <div id="project-list"></div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

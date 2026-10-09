@@ -1,0 +1,42 @@
+# Lokalny runtime Node.js, logi i pliki kontrolne
+/.local/
+
+# Lokalna baza SQLite (zdjęcia z assets/uploads są publikowane przez Git)
+/data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite-journal
+
+# Zależności i cache narzędzi
+node_modules/
+.npm/
+.cache/
+coverage/
+
+# Konfiguracja prywatna (szablon można dodać do repozytorium)
+.env
+.env.*
+!.env.example
+
+# Logi i pliki tymczasowe
+*.log
+*.pid
+*.tmp
+*.temp
+*.bak
+*~
+
+# Tymczasowe strony używane podczas sprawdzania projektu
+/.gallery-check.html
+/.hobby-check.html
+/.cta-check.html
+/.cta-layout-check.html
+/.lightbox-check.html
+/gallery-browser-check.html
+/gallery-browser-check.js
+
+# Pliki systemowe
+.DS_Store
+Thumbs.db
+Desktop.ini
