@@ -5,17 +5,8 @@
   margin-bottom: 24px;
 }
 .admin-tabs button {
-  padding: 12px 20px;
-  border-radius: 14px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  color: var(--text);
   cursor: pointer;
   font: inherit;
-}
-.admin-tabs button[aria-pressed='true'] {
-  background: var(--accent);
-  color: white;
 }
 #project-preview {
   width: 100%;
@@ -47,9 +38,6 @@
 }
 .admin-link {
   padding: 12px 18px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  color: var(--accent);
   font-size: 14px;
 }
 .admin-header-actions {
@@ -59,7 +47,6 @@
   flex-wrap: wrap;
 }
 button.admin-link {
-  background: transparent;
   font: inherit;
   font-size: 14px;
 }
@@ -126,45 +113,7 @@ button.admin-link {
 }
 .admin-panel button {
   padding: 10px 16px;
-  background: #1769e8;
-  color: white;
-  border: 0;
-  border-radius: 10px;
   font-size: 13px;
-}
-.admin-panel button.subtle {
-  background: var(--panel);
-  color: var(--text);
-}
-.admin-panel button.danger {
-  background: #fff0f0;
-  color: #aa2233;
-}
-:root[data-theme='dark'] .admin-panel button.subtle,
-:root[data-theme='dark'] .admin-panel button.danger {
-  border: 1px solid;
-}
-:root[data-theme='dark'] .admin-panel button.subtle {
-  background: #152d4d;
-  color: #bfddff;
-  border-color: #365c87;
-}
-:root[data-theme='dark'] .admin-panel button.danger {
-  background: #3a1d2c;
-  color: #ffc2cd;
-  border-color: #814052;
-}
-:root[data-theme='dark'] .admin-panel button.subtle:not(:disabled):hover,
-:root[data-theme='dark'] .admin-panel button.subtle:focus-visible {
-  background: #20426c;
-  border-color: #7bb5ff;
-  box-shadow: 0 0 14px rgba(123, 181, 255, 0.16);
-}
-:root[data-theme='dark'] .admin-panel button.danger:not(:disabled):hover,
-:root[data-theme='dark'] .admin-panel button.danger:focus-visible {
-  background: #542537;
-  border-color: #ff91a5;
-  box-shadow: 0 0 14px rgba(255, 145, 165, 0.14);
 }
 .admin-panel button:disabled {
   opacity: 0.6;
@@ -290,56 +239,8 @@ button.admin-link {
   padding: 8px 12px;
   font-size: 13px;
 }
-.admin-shell button,
-.admin-shell .admin-link {
-  transition:
-    background 0.25s ease,
-    border-color 0.25s ease,
-    color 0.25s ease,
-    box-shadow 0.25s ease,
-    transform 0.25s ease;
-}
-.admin-shell button:not(:disabled):is(:hover, :focus-visible),
-.admin-shell a.admin-link:is(:hover, :focus-visible) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(23, 105, 232, 0.2);
-}
-.admin-panel button:not(.subtle):not(.danger):not(:disabled):is(:hover, :focus-visible),
-.admin-tabs button[aria-pressed='true']:not(:disabled):is(:hover, :focus-visible) {
-  background: #287cf0;
-}
-.admin-link:is(:hover, :focus-visible),
-.admin-tabs button:not([aria-pressed='true']):not(:disabled):is(:hover, :focus-visible) {
-  background: rgba(125, 211, 252, 0.14);
-  border-color: var(--accent);
-}
-:root:not([data-theme='dark'])
-  .admin-panel
-  button.subtle:not(:disabled):is(:hover, :focus-visible) {
-  background: #cbe5ff;
-}
-:root:not([data-theme='dark'])
-  .admin-panel
-  button.danger:not(:disabled):is(:hover, :focus-visible) {
-  background: #ffdce2;
-  box-shadow: 0 6px 18px rgba(170, 34, 51, 0.16);
-}
 .admin-shell button:focus-visible,
 .admin-shell .admin-link:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-}
-.admin-shell button:not(:disabled):active,
-.admin-shell a.admin-link:active {
-  transform: translateY(0);
-}
-@media (prefers-reduced-motion: reduce) {
-  .admin-shell button,
-  .admin-shell .admin-link {
-    transition: none;
-  }
-  .admin-shell button:not(:disabled):is(:hover, :focus-visible),
-  .admin-shell a.admin-link:is(:hover, :focus-visible) {
-    transform: none;
-  }
 }

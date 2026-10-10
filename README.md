@@ -13,7 +13,7 @@ i własnym panelem do zarządzania treścią.
 ![Node.js 24+](https://img.shields.io/badge/Node.js-24%2B-5fa04e?style=flat-square&logo=nodedotjs&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-003b57?style=flat-square&logo=sqlite&logoColor=white)
 
-[Wyróżniki](#wyrozniki) · [Uruchomienie](#start) · [Panel admina](#panel) · [Publikacja](#publikacja)
+[Wyróżniki](#wyrozniki) · [Uruchomienie](#start) · [Panel admina](#panel) · [Publikacja](#publikacja) · [Kontrola projektu](#kontrola)
 
 </div>
 
@@ -40,8 +40,11 @@ Portfolio łączy projekty i kompetencje z fotografią oraz zainteresowaniami po
 ### Detale, które budują całość
 
 - **Glassmorphism** — półprzezroczyste elementy, rozmycie i delikatne ramki w obu motywach.
+- **Spójne przyciski** — wspólne style w `assets/css/controls.css`: szklane gradienty, neonowe kapsułki i delikatne powiększenie na hover. Przełączniki w navbarze zachowują minimalistyczny wygląd, a przycisk Instagrama w Hobby ma własny kolorowy gradient.
 - **PL / EN** — przełączanie języka oraz zapamiętywanie języka i motywu w przeglądarce.
 - **Czytelna metryczka** — koncerty mają artystę, wydarzenie, miejsce i datę; pozostałe kategorie pokazują miejsce oraz opcjonalny opis.
+- **Oznaczenie modela** — zdjęcia w kategorii Ludzie mogą zawierać opcjonalny link do profilu na Instagramie, ustawiany w panelu.
+- **Projekty ze zdjęciami** — fotografia jest wyświetlana w całości, a tytuł i krótki opis znajdują się na przyciemnionym gradiencie. Rozwijane szczegóły zachowują spójne, ciemne tło.
 - **Dopasowanie tekstu** — Container Queries i skalowanie czcionki pomagają zmieścić długie wartości w kartach lightboxa.
 - **Obsługa klawiatury** — strzałki zmieniają zdjęcia, Escape zamyka modal; po zamknięciu fokus wraca do galerii.
 - **Mniej ruchu na życzenie** — strona uwzględnia ustawienie `prefers-reduced-motion`.
@@ -69,6 +72,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\start-gallery.ps1
 | :--- | :--- |
 | Portfolio | [localhost:3000](http://localhost:3000) |
 | Hobby i fotografia | [localhost:3000/hobby.html](http://localhost:3000/hobby.html) |
+| Korepetycje | [localhost:3000/knowledge.html](http://localhost:3000/knowledge.html) |
+| Kontakt | [localhost:3000/contact.html](http://localhost:3000/contact.html) |
 | Panel administratora | [localhost:3000/admin.html](http://localhost:3000/admin.html) |
 
 Serwer nasłuchuje na `127.0.0.1`. Zatrzymasz go przez **Ctrl + C** w terminalu. Skrypt [stop-gallery.ps1](scripts/stop-gallery.ps1) służy do zatrzymania instancji uruchomionej w tle i zapisanej w pliku PID.
@@ -81,13 +86,11 @@ Na komputerze panel otwiera kliknięcie logo. Na telefonie stuknij logo dwukrotn
 
 Przy pierwszym wejściu ustaw własne hasło dla loginu **`admin`** — minimum 10 znaków. Panel ma zakładki **Galeria zdjęć**, **Projekty** i **Wiadomości**:
 
-| Galeria zdjęć | Projekty |
+| Zakładka | Dostępne możliwości |
 | :--- | :--- |
-| Dodawanie fotografii i usuwanie wpisów | Dodawanie, edycja i usuwanie projektów |
-| Edycja tytułu, kategorii i metryczki | Tytuł, krótki i pełny opis, technologie oraz link |
-| Miejsce i opcjonalny opis dla natury, ludzi i miejsc | Przypisanie do „Aktualnych projektów” lub „Projektów i kompetencji” |
-| Opcjonalne teksty w języku angielskim | Dodawanie, podmiana i usuwanie zdjęcia z kafelka |
-| Zmniejszanie nowych zdjęć do maks. 2400 px | Rok, symbol kafelka i opcjonalna wersja angielska |
+| **Galeria zdjęć** | Dodawanie i usuwanie zdjęć, edycja tytułu, kategorii, miejsca i opisu; metryczka koncertu oraz opcjonalne oznaczenie modela na Instagramie. Teksty mogą mieć wersję angielską. Nowe zdjęcia są zmniejszane do maks. 2400 px. |
+| **Projekty** | Dodawanie, edycja i usuwanie wpisów; tytuł, opisy, technologie, link, rok i symbol. Wybór sekcji oraz dodawanie, podmiana lub usuwanie zdjęcia. Opcjonalna wersja angielska. |
+| **Wiadomości** | Przeglądanie zgłoszeń, oznaczanie jako przeczytane, odpowiedź w aplikacji pocztowej oraz sprawdzanie i ponawianie powiadomień e-mail. |
 
 Hasło jest przechowywane jako skrót **scrypt z losową solą**. Sesja używa ciasteczka `HttpOnly` i `SameSite=Strict`, trwa do 8 godzin i wygasa po restarcie serwera. Operacje zmieniające dane wymagają logowania oraz zgodnego nagłówka `Origin`.
 
@@ -117,7 +120,7 @@ Po zapisaniu zmian panel aktualizuje pliki:
 
 **Publikacja wymaga commita i pusha.** Panel nie wysyła zmian automatycznie na GitHub. Po skonfigurowaniu GitHub Pages strona może korzystać z eksportów bez uruchomionego backendu.
 
-Baza w `data/`, hasło administratora oraz lokalny runtime w `.local/` są wykluczone z Git. Usunięcie wpisu z panelu pozostawia jego zdjęcie na dysku. Szczegóły pracy z bazą i kopii zapasowych opisuje [LOCAL-GALLERY.md](LOCAL-GALLERY.md).
+Baza w `data/`, hasło administratora, prywatne wiadomości, konfiguracja `.env` oraz lokalny runtime w `.local/` są wykluczone z Git. Szablon `.env.example`, eksporty i zdjęcia są uwzględniane w repozytorium. Usunięcie wpisu z panelu pozostawia jego zdjęcie na dysku. Szczegóły pracy z bazą i kopii zapasowych opisuje [LOCAL-GALLERY.md](LOCAL-GALLERY.md).
 
 ## 🗂️ Struktura projektu
 
@@ -132,7 +135,7 @@ Baza w `data/`, hasło administratora oraz lokalny runtime w `.local/` są wyklu
 ├── inbox.cjs               # Prywatna skrzynka i powiadomienia e-mail
 ├── .env.example            # Szablon lokalnej konfiguracji poczty
 ├── assets/
-│   ├── css/                # Style podstron i komponentów
+│   ├── css/                # Style podstron; controls.css — wspólne przyciski
 │   ├── js/                 # Interakcje, panel i eksporty danych
 │   ├── images/             # Portret
 │   ├── hobby/              # Początkowe zdjęcia galerii
@@ -141,6 +144,8 @@ Baza w `data/`, hasło administratora oraz lokalny runtime w `.local/` są wyklu
 ├── scripts/                # Uruchamianie i kontrola projektu
 └── tests/                  # Testy API, danych i eksportów
 ```
+
+<a id="kontrola"></a>
 
 ## ✅ Sprawdzanie projektu
 

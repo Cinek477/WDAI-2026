@@ -3,17 +3,6 @@
   align-self: flex-start;
   padding: 10px 16px;
   margin-top: 16px;
-  border-radius: 20px;
-  color: var(--accent);
-  background: rgba(125, 211, 252, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.4);
-  transition:
-    background 0.2s,
-    box-shadow 0.2s;
-}
-.lightbox-instagram:is(:hover, :focus-visible) {
-  background: rgba(125, 211, 252, 0.22);
-  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
 }
 .photo-lightbox {
   max-width: none;
@@ -235,21 +224,6 @@
   background: #1769e8;
   box-shadow: 0 0 12px rgba(23, 105, 232, 0.35);
 }
-:root[data-theme='light'] .photo-lightbox .lightbox-arrow,
-:root[data-theme='light'] .photo-lightbox .lightbox-close {
-  background: rgba(255, 255, 255, 0.55);
-  border-color: rgba(50, 95, 155, 0.2);
-  color: #245a97;
-  box-shadow: 0 4px 16px rgba(35, 75, 120, 0.12);
-}
-:root[data-theme='light'] .photo-lightbox .lightbox-arrow:hover,
-:root[data-theme='light'] .photo-lightbox .lightbox-arrow:focus-visible,
-:root[data-theme='light'] .photo-lightbox .lightbox-close:hover,
-:root[data-theme='light'] .photo-lightbox .lightbox-close:focus-visible {
-  background: rgba(140, 190, 255, 0.45);
-  border-color: rgba(23, 105, 232, 0.45);
-  box-shadow: 0 0 24px rgba(23, 105, 232, 0.2);
-}
 .lightbox-info-tile:hover {
   background-image: linear-gradient(
     135deg,
@@ -377,26 +351,6 @@
   height: 44px;
   padding: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #e0edff;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  transition:
-    background 0.25s,
-    border-color 0.25s,
-    box-shadow 0.25s,
-    scale 0.25s;
-}
-.photo-lightbox .lightbox-arrow:hover,
-.photo-lightbox .lightbox-arrow:focus-visible,
-.photo-lightbox .lightbox-close:hover,
-.photo-lightbox .lightbox-close:focus-visible {
-  background: rgba(70, 140, 255, 0.3);
-  border-color: rgba(160, 205, 255, 0.65);
-  box-shadow: 0 0 24px rgba(80, 150, 255, 0.35);
-  scale: 1.08;
 }
 .visually-hidden {
   position: absolute;

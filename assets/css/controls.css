@@ -1,0 +1,200 @@
+/* Wspólny wygląd kontrolek; rozmiary i rozmieszczenie należą do podstron. */
+:root {
+  --control-bg: linear-gradient(135deg, rgba(125, 211, 252, 0.12), rgba(23, 105, 232, 0.18));
+  --control-border: rgba(23, 105, 232, 0.28);
+  --control-glow: rgba(23, 105, 232, 0.2);
+  --pill-active-bg: rgba(56, 189, 248, 0.18);
+  --pill-active-border: #238ccc;
+  --pill-active-text: #12385f;
+  --danger-bg: rgba(225, 70, 95, 0.1);
+  --danger-text: #aa2233;
+}
+:root[data-theme='dark'] {
+  --control-border: rgba(125, 211, 252, 0.4);
+  --control-glow: rgba(56, 189, 248, 0.22);
+  --pill-active-bg: rgba(56, 189, 248, 0.15);
+  --pill-active-border: #38bdf8;
+  --pill-active-text: #fff;
+  --danger-bg: rgba(225, 70, 95, 0.16);
+  --danger-text: #ffc2cd;
+}
+:root
+  :is(
+    .hero-actions a,
+    .contact-submit,
+    .admin-shell .admin-panel button,
+    .admin-shell .admin-link,
+    .lightbox-instagram
+  ) {
+  background: var(--control-bg);
+  color: var(--text);
+  border: 1px solid var(--control-border);
+  border-radius: 14px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  font-weight: 600;
+  box-shadow: 0 4px 18px rgba(23, 105, 232, 0.1);
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+:root
+  :is(
+    .hero-actions a,
+    .contact-submit,
+    .admin-shell .admin-panel button,
+    .admin-shell .admin-link,
+    .lightbox-instagram
+  ):not(:disabled):not([aria-disabled='true']):is(:hover, :focus-visible) {
+  background: #1769e8;
+  color: #fff;
+  border-color: #7dd3fc;
+  box-shadow: 0 8px 24px var(--control-glow);
+  transform: scale(1.05);
+}
+:root .admin-shell .admin-panel button.danger {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+  border-color: rgba(225, 70, 95, 0.4);
+}
+:root .admin-shell .admin-panel button.danger:not(:disabled):is(:hover, :focus-visible) {
+  background: #aa2233;
+  color: #fff;
+  border-color: #ff91a5;
+  box-shadow: 0 8px 24px rgba(225, 70, 95, 0.2);
+}
+:root :is(.gallery-filter, .contact-radio + label, .admin-shell .admin-tabs button) {
+  background: var(--control-bg);
+  color: var(--muted);
+  border: 1px solid var(--control-border);
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  text-shadow: none;
+  box-shadow: none;
+  transform: none;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+:root
+  :is(.gallery-filter, .contact-radio + label, .admin-shell .admin-tabs button):not(:disabled):is(
+    :hover,
+    :focus-visible
+  ),
+:root .contact-radio:focus-visible + label {
+  background: var(--pill-active-bg);
+  color: var(--text);
+  border-color: var(--pill-active-border);
+  box-shadow: 0 6px 18px var(--control-glow);
+  transform: scale(1.05);
+}
+:root
+  :is(
+    .gallery-filter[aria-pressed='true'],
+    .contact-radio:checked + label,
+    .admin-shell .admin-tabs button[aria-pressed='true']
+  ) {
+  background: var(--pill-active-bg);
+  color: var(--pill-active-text);
+  border-color: var(--pill-active-border);
+  box-shadow: 0 0 15px var(--control-glow);
+  text-shadow: none;
+}
+:root
+  :is(
+    .contact-fab,
+    .admin-shell .theme,
+    .photo-lightbox .lightbox-arrow,
+    .photo-lightbox .lightbox-close
+  ) {
+  background: var(--control-bg);
+  border: 1px solid var(--control-border);
+  color: var(--text);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 18px rgba(23, 105, 232, 0.1);
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    scale 0.25s ease;
+}
+:root
+  :is(
+    .contact-fab,
+    .admin-shell .theme,
+    .photo-lightbox .lightbox-arrow,
+    .photo-lightbox .lightbox-close
+  ):is(:hover, :focus-visible) {
+  background: #1769e8;
+  color: #fff;
+  border-color: #7dd3fc;
+  box-shadow: 0 8px 24px var(--control-glow);
+  scale: 1.05;
+}
+:root .admin-shell .theme {
+  border-radius: 50%;
+}
+:root
+  :is(
+    .hero-actions a,
+    .contact-submit,
+    .admin-shell .admin-panel button,
+    .admin-shell .admin-link,
+    .lightbox-instagram,
+    .gallery-filter,
+    .admin-shell .admin-tabs button
+  ):not(:disabled):active {
+  transform: scale(0.98);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root
+    :is(
+      .hero-actions a,
+      .contact-submit,
+      .admin-shell button,
+      .admin-shell .admin-link,
+      .lightbox-instagram,
+      .gallery-filter,
+      .contact-radio + label,
+      .contact-fab,
+      .photo-lightbox button
+    ) {
+    transition: none;
+  }
+  :root
+    :is(
+      .hero-actions a,
+      .contact-submit,
+      .admin-shell .admin-panel button,
+      .admin-shell .admin-link,
+      .lightbox-instagram,
+      .gallery-filter,
+      .contact-radio + label,
+      .admin-shell .admin-tabs button
+    ):not(:disabled):not([aria-disabled='true']):is(:hover, :focus-visible, :active),
+  :root .contact-radio:focus-visible + label {
+    transform: none;
+  }
+  :root
+    :is(
+      .contact-fab,
+      .admin-shell .theme,
+      .photo-lightbox .lightbox-arrow,
+      .photo-lightbox .lightbox-close
+    ):is(:hover, :focus-visible) {
+    scale: 1;
+  }
+}

@@ -26,7 +26,8 @@
   opacity: 0;
   transition: opacity 0.3s;
 }
-.instagram-cta:hover::before {
+.instagram-cta:hover::before,
+.instagram-cta:focus-visible::before {
   opacity: 1;
 }
 .instagram-cta[aria-disabled='true'] {
@@ -46,32 +47,6 @@
   gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 24px;
-}
-.gallery-filter {
-  border: 1px solid var(--line);
-  border-radius: 100px;
-  padding: 9px 18px;
-  background: transparent;
-  color: var(--text);
-  font-size: 13px;
-  transition:
-    background 0.2s,
-    transform 0.2s;
-}
-.gallery-filter:hover {
-  background: var(--panel);
-}
-.gallery-filter[aria-pressed='true'] {
-  background: #15365b;
-  color: #eef6ff;
-  border-color: #15365b;
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 6px #0003;
-}
-[data-theme='dark'] .gallery-filter[aria-pressed='true'] {
-  background: #a9cfff;
-  color: #10243e;
-  border-color: #a9cfff;
 }
 .gallery-toolbar {
   display: flex;
