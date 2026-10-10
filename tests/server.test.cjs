@@ -101,6 +101,7 @@ test('SQLite import, upload, edit, deletion, persistence and local access rules'
     const response = await write('/api/photos', 'POST', {
       image: photo.image,
       category,
+      instagram: category === 'people' ? 'https://www.instagram.com/47.cinek/' : '',
       venue: 'Tatry',
       artist: 'Nie dotyczy',
       date: '2026-02-31',
@@ -112,6 +113,30 @@ test('SQLite import, upload, edit, deletion, persistence and local access rules'
     assert.equal(simple.place.pl, 'Tatry');
     assert.equal(simple.date, '');
     assert.equal(simple.artist, '');
+    assert.equal(simple.instagram, category === 'people' ? '47.cinek' : '');
+    assert.equal(
+      exportedPhotos().find((item) => item.id === simple.id).instagram,
+      simple.instagram,
+    );
+    if (category === 'people') {
+      assert.equal(
+        (
+          await write(`/api/photos/${simple.id}`, 'PUT', {
+            category,
+            venue: 'Tatry',
+            instagram: 'https://example.com/profile',
+          })
+        ).status,
+        400,
+      );
+      const edited = await write(`/api/photos/${simple.id}`, 'PUT', {
+        category,
+        venue: 'Tatry',
+        instagram: '@nowa.osoba',
+      });
+      assert.equal(edited.status, 200);
+      assert.equal((await edited.json()).instagram, 'nowa.osoba');
+    }
     assert.equal(simple.description.pl, 'Nie dotyczy');
     assert.equal(exportedPhotos().find((item) => item.id === simple.id).place.pl, 'Tatry');
     assert.equal((await write(`/api/photos/${simple.id}`, 'DELETE')).status, 200);

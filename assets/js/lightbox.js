@@ -223,6 +223,15 @@
     if (concert) information.append(badges, heading, grid, description);
     else {
       information.append(badges, heading, grid);
+      if (photo.category === 'people' && /^[a-zA-Z0-9._]{1,30}$/.test(photo.instagram || '')) {
+        const instagram = document.createElement('a');
+        instagram.className = 'lightbox-instagram';
+        instagram.href = `https://www.instagram.com/${photo.instagram}/`;
+        instagram.target = '_blank';
+        instagram.rel = 'noopener noreferrer';
+        instagram.textContent = `@${photo.instagram} ↗`;
+        information.append(instagram);
+      }
       if (local(photo.description)) information.append(description);
     }
 

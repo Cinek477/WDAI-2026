@@ -143,10 +143,6 @@ button.admin-link {
 :root[data-theme='dark'] .admin-panel button.subtle,
 :root[data-theme='dark'] .admin-panel button.danger {
   border: 1px solid;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
 }
 :root[data-theme='dark'] .admin-panel button.subtle {
   background: #152d4d;
@@ -293,4 +289,57 @@ button.admin-link {
 .inbox-message .admin-link {
   padding: 8px 12px;
   font-size: 13px;
+}
+.admin-shell button,
+.admin-shell .admin-link {
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+.admin-shell button:not(:disabled):is(:hover, :focus-visible),
+.admin-shell a.admin-link:is(:hover, :focus-visible) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(23, 105, 232, 0.2);
+}
+.admin-panel button:not(.subtle):not(.danger):not(:disabled):is(:hover, :focus-visible),
+.admin-tabs button[aria-pressed='true']:not(:disabled):is(:hover, :focus-visible) {
+  background: #287cf0;
+}
+.admin-link:is(:hover, :focus-visible),
+.admin-tabs button:not([aria-pressed='true']):not(:disabled):is(:hover, :focus-visible) {
+  background: rgba(125, 211, 252, 0.14);
+  border-color: var(--accent);
+}
+:root:not([data-theme='dark'])
+  .admin-panel
+  button.subtle:not(:disabled):is(:hover, :focus-visible) {
+  background: #cbe5ff;
+}
+:root:not([data-theme='dark'])
+  .admin-panel
+  button.danger:not(:disabled):is(:hover, :focus-visible) {
+  background: #ffdce2;
+  box-shadow: 0 6px 18px rgba(170, 34, 51, 0.16);
+}
+.admin-shell button:focus-visible,
+.admin-shell .admin-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.admin-shell button:not(:disabled):active,
+.admin-shell a.admin-link:active {
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin-shell button,
+  .admin-shell .admin-link {
+    transition: none;
+  }
+  .admin-shell button:not(:disabled):is(:hover, :focus-visible),
+  .admin-shell a.admin-link:is(:hover, :focus-visible) {
+    transform: none;
+  }
 }

@@ -129,6 +129,15 @@
               >
             </div>
             <label>Artysta<input name="artist" maxlength="500" placeholder="Mata" /></label>
+            <label hidden
+              >Model (opcjonalnie)<input
+                name="instagram"
+                maxlength="200"
+                placeholder="@nazwa lub https://www.instagram.com/nazwa/"
+              /><small class="admin-hint"
+                >Publiczne oznaczenie przy zdjęciu w kategorii Ludzie.</small
+              ></label
+            >
             <label
               >Wydarzenie<input name="event" maxlength="500" placeholder="Finał Mata2040"
             /></label>
@@ -137,14 +146,7 @@
               ><label>Miasto<input name="city" maxlength="500" placeholder="Warszawa" /></label>
             </div>
             <label>Data<input name="date" type="date" /></label>
-            <label
-              >Krótki opis<textarea
-                name="description"
-                rows="3"
-                maxlength="2000"
-                placeholder="Jedno zdanie o tym kadrze."
-              ></textarea>
-            </label>
+            <label>Krótki opis<textarea name="description" rows="3" maxlength="2000" placeholder="Jedno zdanie o tym kadrze."></textarea></label>
             <details>
               <summary>Teksty w wersji angielskiej (opcjonalnie)</summary>
               <label>Tytuł EN<input name="titleEn" maxlength="500" /></label

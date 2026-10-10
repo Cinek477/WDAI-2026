@@ -7,6 +7,9 @@ let previewUrl = null;
 const pl = (value) => (typeof value === 'string' ? value : value?.pl || '');
 function updateCategory() {
   const concert = form.elements.category.value === 'concerts';
+  const person = form.elements.category.value === 'people';
+  form.elements.instagram.closest('label').hidden = !person;
+  form.elements.instagram.disabled = !person;
   for (const key of ['artist', 'event', 'eventEn', 'city', 'cityEn', 'date']) {
     const input = form.elements[key];
     input.closest('label').hidden = !concert;
@@ -48,6 +51,7 @@ function edit(photo) {
   for (const key of [
     'title',
     'artist',
+    'instagram',
     'event',
     'venue',
     'city',

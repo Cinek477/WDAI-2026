@@ -1,3 +1,20 @@
+.lightbox-instagram {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 10px 16px;
+  margin-top: 16px;
+  border-radius: 20px;
+  color: var(--accent);
+  background: rgba(125, 211, 252, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
+}
+.lightbox-instagram:is(:hover, :focus-visible) {
+  background: rgba(125, 211, 252, 0.22);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+}
 .photo-lightbox {
   max-width: none;
   max-height: calc(100dvh - 40px);

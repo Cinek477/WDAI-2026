@@ -217,6 +217,23 @@ function createGalleryServer(options = {}) {
         : value;
     }
     const concert = photo.category === 'concerts';
+    photo.instagram = '';
+    if (photo.category === 'people') {
+      const instagram = string(input.instagram ?? old.instagram ?? '', 'Instagram', 200);
+      const handle = instagram
+        .replace(/^https?:\/\/(?:www\.)?instagram\.com\//i, '')
+        .replace(/^@/, '')
+        .replace(/\/$/, '');
+      if (
+        handle &&
+        (!/^[a-zA-Z0-9._]{1,30}$/.test(handle) || handle.includes('..') || handle.endsWith('.'))
+      )
+        throw Object.assign(
+          new Error('Podaj poprawną nazwę profilu Instagram lub link do profilu.'),
+          { status: 400 },
+        );
+      photo.instagram = handle;
+    }
     if (!concert) {
       if (!photo.venue) throw Object.assign(new Error('Podaj miejsce zdjęcia.'), { status: 400 });
       photo.artist = '';
