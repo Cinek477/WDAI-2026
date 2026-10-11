@@ -38,7 +38,7 @@
   function publicPage(url) {
     return (
       url.origin === location.origin &&
-      /\/(?:index|hobby|contact|knowledge)\.html$|\/$/.test(url.pathname)
+      /\/(?:index|about|hobby|contact|knowledge)\.html$|\/$/.test(url.pathname)
     );
   }
   async function loadScript(source) {

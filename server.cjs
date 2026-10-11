@@ -259,7 +259,7 @@ function createGalleryServer(options = {}) {
       photo.glowColor = input.glowColor;
     return photo;
   }
-  function storeImage(dataUrl, group = 'gallery') {
+  function storeImage(dataUrl, group = 'gallery', basename = crypto.randomUUID()) {
     const match =
       typeof dataUrl === 'string' &&
       dataUrl.match(/^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/=]+)$/);
@@ -277,11 +277,28 @@ function createGalleryServer(options = {}) {
       throw Object.assign(new Error('Niepoprawny obraz lub plik większy niż 20 MB.'), {
         status: 400,
       });
-    const name = `${crypto.randomUUID()}.${match[1] === 'jpeg' ? 'jpg' : match[1]}`;
-    const directory = path.join(uploadDir, group);
+    const name = `${basename}.${match[1] === 'jpeg' ? 'jpg' : match[1]}`;
+    const size = basename.endsWith('_thumb') ? '800px' : '2400px';
+    const directory = path.join(uploadDir, group, size);
     fs.mkdirSync(directory, { recursive: true });
     fs.writeFileSync(path.join(directory, name), bytes, { flag: 'wx' });
-    return { src: `assets/images/${group}/${name}`, file: path.join(directory, name) };
+    return { src: `assets/images/${group}/${size}/${name}`, file: path.join(directory, name) };
+  }
+  function storeImages(input, group = 'gallery') {
+    const id = crypto.randomUUID();
+    const main = storeImage(input.image, group, id);
+    let thumb;
+    try {
+      if (input.thumbnail) thumb = storeImage(input.thumbnail, group, `${id}_thumb`);
+      return {
+        src: main.src,
+        thumbUrl: thumb?.src || '',
+        files: [main.file, thumb?.file].filter(Boolean),
+      };
+    } catch (error) {
+      fs.unlinkSync(main.file);
+      throw error;
+    }
   }
   function normalizeProject(input, old = {}) {
     if (!input || typeof input !== 'object' || Array.isArray(input))
@@ -311,6 +328,7 @@ function createGalleryServer(options = {}) {
     )
       throw Object.assign(new Error('Podaj link HTTP/HTTPS.'), { status: 400 });
     project.src = input.removeImage ? '' : old.src || '';
+    project.thumbUrl = input.removeImage ? '' : old.thumbUrl || '';
     return project;
   }
   const inbox = require('./inbox.cjs').createInbox({ db, json, body, authenticated, options });
@@ -433,8 +451,11 @@ function createGalleryServer(options = {}) {
           const input = await body(req);
           const project = normalizeProject(input, row ? JSON.parse(row.data) : {});
           project.id = projectId || crypto.randomUUID();
-          const upload = input.image ? storeImage(input.image, 'projects') : null;
-          if (upload) project.src = upload.src;
+          const upload = input.image ? storeImages(input, 'projects') : null;
+          if (upload) {
+            project.src = upload.src;
+            project.thumbUrl = upload.thumbUrl;
+          }
           try {
             mutateGallery(() => {
               if (row)
@@ -451,7 +472,7 @@ function createGalleryServer(options = {}) {
                 );
             });
           } catch (error) {
-            if (upload) fs.unlinkSync(upload.file);
+            if (upload) upload.files.forEach((file) => fs.unlinkSync(file));
             throw error;
           }
           return json(res, row ? 200 : 201, project);
@@ -469,8 +490,9 @@ function createGalleryServer(options = {}) {
           const input = await body(req);
           const photo = normalize(input);
           photo.id = crypto.randomUUID();
-          const upload = storeImage(input.image);
+          const upload = storeImages(input);
           photo.src = upload.src;
+          photo.thumbUrl = upload.thumbUrl;
           try {
             mutateGallery(() =>
               insert.run(
@@ -481,7 +503,7 @@ function createGalleryServer(options = {}) {
               ),
             );
           } catch (error) {
-            fs.unlinkSync(upload.file);
+            upload.files.forEach((file) => fs.unlinkSync(file));
             throw error;
           }
           return json(res, 201, photo);
@@ -511,10 +533,15 @@ function createGalleryServer(options = {}) {
       }
       const relative = pathname === '/' ? 'index.html' : pathname.replace(/^\//, '');
       // Otwarte przed reorganizacją karty mogą nadal używać dawnych adresów zdjęć.
-      if (/^assets\/(?:hobby|uploads)\/[^/\\]+\.(?:jpe?g|png|webp)$/i.test(relative)) {
+      if (
+        /^assets\/(?:(?:hobby|uploads)|images\/(?:gallery|projects))\/[^/\\]+\.(?:jpe?g|png|webp)$/i.test(
+          relative,
+        )
+      ) {
         const name = path.basename(relative);
         for (const group of ['gallery', 'projects']) {
-          const target = `assets/images/${group}/${name}`;
+          const size = path.parse(name).name.endsWith('_thumb') ? '800px' : '2400px';
+          const target = `assets/images/${group}/${size}/${name}`;
           if (fs.existsSync(path.join(ROOT, target))) {
             res.writeHead(302, { Location: '/' + target, 'Cache-Control': 'no-store' });
             return res.end();

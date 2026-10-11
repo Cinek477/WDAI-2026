@@ -83,6 +83,7 @@ test('SQLite import, upload, edit, deletion, persistence and local access rules'
       headers: { 'Content-Type': 'application/json', Origin: origin, Cookie: sessionCookie },
       body: value && JSON.stringify(value),
     });
+  photo.thumbnail = photo.image;
   assert.equal((await write('/api/photos', 'POST', photo, 'http://example.com')).status, 403);
   assert.equal((await write('/api/auth/setup', 'POST', { password: testPassword })).status, 409);
   assert.equal(
@@ -154,11 +155,39 @@ test('SQLite import, upload, edit, deletion, persistence and local access rules'
   const createdResponse = await write('/api/photos', 'POST', photo);
   assert.equal(createdResponse.status, 201);
   const created = await createdResponse.json();
+  assert.match(created.thumbUrl, /_thumb\.png$/);
+  assert.ok(
+    fs.existsSync(
+      path.join(options.uploadDir, 'gallery', '800px', path.basename(created.thumbUrl)),
+    ),
+  );
   assert.equal(created.date, '09.10.2026');
   assert.equal(created.glowColor, '#ff1122');
   assert.equal(exportedPhotos().length, initial.length + 1);
   assert.deepEqual(exportedPhotos()[initial.length], created);
-  assert.equal(fs.readdirSync(path.join(options.uploadDir, 'gallery')).length, 4);
+  assert.equal(
+    fs
+      .readdirSync(path.join(options.uploadDir, 'gallery'), {
+        recursive: true,
+        withFileTypes: true,
+      })
+      .filter((entry) => entry.isFile()).length,
+    5,
+  );
+  assert.equal(
+    (await write('/api/photos', 'POST', { ...photo, thumbnail: 'data:image/png;base64,YmFk' }))
+      .status,
+    400,
+  );
+  assert.equal(
+    fs
+      .readdirSync(path.join(options.uploadDir, 'gallery'), {
+        recursive: true,
+        withFileTypes: true,
+      })
+      .filter((entry) => entry.isFile()).length,
+    5,
+  );
   const update = await write(`/api/photos/${created.id}`, 'PUT', {
     ...photo,
     title: 'Zmieniony tytuł',
@@ -178,7 +207,15 @@ test('SQLite import, upload, edit, deletion, persistence and local access rules'
   await start();
   assert.equal((await (await fetch(`${base}/api/photos`)).json()).length, 0);
   assert.deepEqual(exportedPhotos(), []);
-  assert.equal(fs.readdirSync(path.join(options.uploadDir, 'gallery')).length, 4);
+  assert.equal(
+    fs
+      .readdirSync(path.join(options.uploadDir, 'gallery'), {
+        recursive: true,
+        withFileTypes: true,
+      })
+      .filter((entry) => entry.isFile()).length,
+    5,
+  );
   assert.equal((await write('/api/auth/logout', 'POST')).status, 200);
   assert.equal((await write('/api/photos', 'POST', photo)).status, 401);
   assert.equal((await write('/api/photos/concert-1', 'PUT', photo)).status, 401);

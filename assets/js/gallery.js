@@ -32,7 +32,15 @@ window.portfolioPages['gallery.js'] = async () => {
   function visual(photo) {
     if (photo.src) {
       const image = document.createElement('img');
-      image.src = photo.src;
+      image.src = photo.thumbUrl || photo.src;
+      image.addEventListener(
+        'error',
+        () => {
+          if (photo.thumbUrl) image.src = photo.src;
+        },
+        { once: true },
+      );
+      image.decoding = 'async';
       image.alt = text(photo.title);
       image.loading = 'lazy';
       image.draggable = false;

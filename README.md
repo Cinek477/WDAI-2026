@@ -41,6 +41,7 @@ Portfolio łączy projekty i kompetencje z fotografią oraz zainteresowaniami po
 ### Detale, które budują całość
 
 - **Glassmorphism** — półprzezroczyste elementy, rozmycie i delikatne ramki w obu motywach.
+- **Miniatury i lazy loading** — panel generuje zdjęcie do 2400 px oraz miniaturę do 800 px szerokości. Karty ładują miniatury z `thumbUrl` dopiero w pobliżu ekranu; lightbox wyświetla pełną wersję. Starsze wpisy i brakujące miniatury mają fallback do oryginału.
 - **Spójne przyciski** — wspólne style w `assets/css/controls.css`: szklane gradienty, neonowe kapsułki i delikatne powiększenie na hover. Przełączniki w navbarze zachowują minimalistyczny wygląd, a przycisk Instagrama w Hobby ma własny kolorowy gradient.
 - **PL / EN** — przełączanie języka oraz zapamiętywanie języka i motywu w przeglądarce.
 - **Czytelna metryczka** — koncerty mają artystę, wydarzenie, miejsce i datę; pozostałe kategorie pokazują miejsce oraz opcjonalny opis.
@@ -128,6 +129,7 @@ Baza w `data/`, hasło administratora, prywatne wiadomości, konfiguracja `.env`
 
 ```text
 ├── index.html              # Portfolio: projekty i kompetencje
+├── about.html              # O Mnie: CV, doświadczenie, edukacja i kompetencje
 ├── knowledge.html          # Korepetycje
 ├── hobby.html              # Hobby, galeria i lightbox
 ├── contact.html            # Kontakt i kreator wiadomości
@@ -141,8 +143,12 @@ Baza w `data/`, hasło administratora, prywatne wiadomości, konfiguracja `.env`
 │   ├── js/                 # Interakcje, panel i eksporty danych
 │   └── images/
 │       ├── profile/        # Portret i stałe zdjęcia profilowe
-│       ├── gallery/        # Wszystkie zdjęcia galerii Hobby
+│       ├── gallery/        # Zdjęcia galerii Hobby
+│       │   ├── 2400px/     # Wersje główne; wcześniejsze oryginały zachowane
+│       │   └── 800px/      # Miniatury kart
 │       └── projects/       # Zdjęcia projektów
+│           ├── 2400px/     # Wersje główne
+│           └── 800px/      # Miniatury kart
 ├── data/                   # Lokalna baza — poza Git
 ├── scripts/                # Uruchamianie i kontrola projektu
 └── tests/                  # Testy API, danych i eksportów

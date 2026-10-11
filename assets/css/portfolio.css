@@ -568,6 +568,112 @@ footer {
   display: flex;
   gap: 18px;
 }
+.footer-signature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  min-width: 0;
+  flex: 1;
+  margin-right: 24px;
+}
+.footer-copyright {
+  color: var(--muted);
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+:root[data-theme='dark'] .footer-copyright {
+  color: rgba(255, 255, 255, 0.5);
+}
+.footer-status-slot {
+  flex: 0 1 232px;
+  min-width: 22px;
+  max-width: 100%;
+}
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px;
+  border-radius: 20px;
+  cursor: pointer;
+  overflow: hidden;
+  vertical-align: middle;
+  transition:
+    padding 0.4s ease,
+    background 0.4s ease,
+    border-color 0.4s ease;
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: #38bdf8;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #38bdf8;
+  flex-shrink: 0;
+  margin: 0 4px;
+  animation: pulse-dot 2s infinite;
+}
+.status-text {
+  max-width: 0;
+  opacity: 0;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-left: 0;
+  transition:
+    max-width 0.4s ease,
+    opacity 0.4s ease,
+    margin-left 0.4s ease;
+}
+.status-indicator:is(:hover, :focus) {
+  padding: 6px 12px;
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+.status-indicator:is(:hover, :focus) .status-text {
+  max-width: 200px;
+  opacity: 1;
+  margin-left: 8px;
+}
+.status-indicator:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+:root:not([data-theme='dark']) .status-indicator {
+  border-color: rgba(20, 46, 80, 0.12);
+}
+:root:not([data-theme='dark']) .status-text {
+  color: var(--text);
+}
+@keyframes pulse-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(56, 189, 248, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+  }
+}
+@media (max-width: 760px) {
+  .footer-signature {
+    margin-right: 0;
+    width: 100%;
+    flex: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .status-dot {
+    animation: none;
+  }
+  .status-indicator,
+  .status-text {
+    transition: none;
+  }
+}
 .social {
   display: grid;
   place-items: center;
@@ -960,6 +1066,18 @@ footer {
 .project-description {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+.about-intro {
+  color: var(--muted);
+  max-width: 55ch;
+}
+.about-sections {
+  display: grid;
+  gap: 24px;
+  margin-top: 40px;
+}
+.about-sections .subpage-content {
+  margin: 0;
 }
 .error-page {
   min-height: 100vh;

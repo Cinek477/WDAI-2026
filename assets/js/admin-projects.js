@@ -47,7 +47,14 @@
       card.className = 'admin-photo';
       if (project.src) {
         const image = new Image();
-        image.src = project.src;
+        image.src = project.thumbUrl || project.src;
+        image.addEventListener(
+          'error',
+          () => {
+            if (project.thumbUrl) image.src = project.src;
+          },
+          { once: true },
+        );
         image.alt = pl(project.title);
         image.loading = 'lazy';
         card.append(image);
@@ -109,7 +116,7 @@
     list.inert = true;
     status('Zapisywanie projektu…');
     try {
-      if (file) input.image = (await prepareImage(file)).image;
+      if (file) Object.assign(input, await prepareImage(file));
       await api(id ? `/api/projects/${id}` : '/api/projects', {
         method: id ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },

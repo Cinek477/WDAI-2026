@@ -86,17 +86,27 @@ test('Projects: authenticated CRUD, image replacement, export and persistence', 
     title: 'Nowy tytuł',
     section: 'achievements',
     image,
+    thumbnail: image,
   });
   assert.equal(update.status, 200);
   project = await update.json();
   assert.match(project.src, /^assets\/images\/projects\//);
-  assert.ok(fs.existsSync(path.join(options.uploadDir, 'projects', path.basename(project.src))));
+  assert.match(project.thumbUrl, /_thumb\.png$/);
+  assert.ok(
+    fs.existsSync(
+      path.join(options.uploadDir, 'projects', '800px', path.basename(project.thumbUrl)),
+    ),
+  );
+  assert.ok(
+    fs.existsSync(path.join(options.uploadDir, 'projects', '2400px', path.basename(project.src))),
+  );
   assert.equal(exported().find((item) => item.id === project.id).title.pl, 'Nowy tytuł');
   const firstImage = project.src;
-  project = await (await write(endpoint, 'PUT', { ...input, image })).json();
+  project = await (await write(endpoint, 'PUT', { ...input, image, thumbnail: image })).json();
   assert.notEqual(project.src, firstImage);
   project = await (await write(endpoint, 'PUT', { ...input, removeImage: true })).json();
   assert.equal(project.src, '');
+  assert.equal(project.thumbUrl, '');
   await stop();
   await start();
   const persisted = await (await fetch(`${base}/api/projects`)).json();
@@ -110,5 +120,13 @@ test('Projects: authenticated CRUD, image replacement, export and persistence', 
   assert.equal((await write(endpoint, 'DELETE')).status, 200);
   assert.equal(exported().length, initial.length);
   assert.equal((await write(endpoint, 'PUT', input)).status, 404);
-  assert.equal(fs.readdirSync(path.join(options.uploadDir, 'projects')).length, 2);
+  assert.equal(
+    fs
+      .readdirSync(path.join(options.uploadDir, 'projects'), {
+        recursive: true,
+        withFileTypes: true,
+      })
+      .filter((entry) => entry.isFile()).length,
+    4,
+  );
 });

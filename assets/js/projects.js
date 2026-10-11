@@ -30,7 +30,15 @@ window.portfolioPages['projects.js'] = () => {
           media = document.createElement('div');
           media.className = 'project-media';
           const image = new Image();
-          image.src = project.src;
+          image.src = project.thumbUrl || project.src;
+          image.addEventListener(
+            'error',
+            () => {
+              if (project.thumbUrl) image.src = project.src;
+            },
+            { once: true },
+          );
+          image.decoding = 'async';
           image.alt = local(project.title);
           image.className = 'project-cover';
           image.loading = 'lazy';

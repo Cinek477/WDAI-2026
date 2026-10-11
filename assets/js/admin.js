@@ -90,7 +90,14 @@ async function loadPhotos() {
     const card = document.createElement('article');
     card.className = 'admin-photo';
     const image = new Image();
-    image.src = photo.src;
+    image.src = photo.thumbUrl || photo.src;
+    image.addEventListener(
+      'error',
+      () => {
+        if (photo.thumbUrl) image.src = photo.src;
+      },
+      { once: true },
+    );
     image.alt = pl(photo.title);
     image.loading = 'lazy';
     const content = document.createElement('div');
@@ -198,7 +205,16 @@ async function prepareImage(file) {
     sample.width = sample.height = 48;
     const sampleContext = sample.getContext('2d', { willReadFrequently: true });
     sampleContext.drawImage(image, 0, 0, 48, 48);
-    return { image: canvas.toDataURL('image/jpeg', 0.9), glowColor: dominantColor(sampleContext) };
+    const thumbnail = document.createElement('canvas');
+    const thumbScale = Math.min(1, 800 / canvas.width);
+    thumbnail.width = Math.max(1, Math.round(canvas.width * thumbScale));
+    thumbnail.height = Math.max(1, Math.round(canvas.height * thumbScale));
+    thumbnail.getContext('2d').drawImage(canvas, 0, 0, thumbnail.width, thumbnail.height);
+    return {
+      image: canvas.toDataURL('image/jpeg', 0.85),
+      thumbnail: thumbnail.toDataURL('image/webp', 0.78),
+      glowColor: dominantColor(sampleContext),
+    };
   } finally {
     URL.revokeObjectURL(url);
   }
@@ -235,6 +251,7 @@ document.querySelector('#cancel').addEventListener('click', resetForm);
 const loginForm = document.querySelector('#login-form');
 document.querySelectorAll('[data-panel]').forEach((button) =>
   button.addEventListener('click', () => {
+    if (button.getAttribute('aria-pressed') === 'true') return;
     document.querySelectorAll('[data-panel]').forEach((tab) => {
       const active = tab === button;
       tab.setAttribute('aria-pressed', String(active));

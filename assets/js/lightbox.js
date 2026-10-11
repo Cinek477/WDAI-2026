@@ -126,6 +126,7 @@ window.portfolioPages['lightbox.js'] = () => {
           const image = new Image();
           image.alt = local(item.title);
           image.decoding = 'async';
+          image.loading = 'lazy';
           if (location.protocol !== 'file:') image.crossOrigin = 'anonymous';
           image.addEventListener(
             'load',
@@ -154,7 +155,10 @@ window.portfolioPages['lightbox.js'] = () => {
     [...carousel.children].forEach((frame, index) => {
       frame.classList.toggle('is-active', index === selectedIndex);
       const image = frame.querySelector('img');
-      if (image) image.alt = local(collection[index].title);
+      if (image) {
+        image.alt = local(collection[index].title);
+        image.loading = index === selectedIndex ? 'eager' : 'lazy';
+      }
     });
     const selectedFrame = carousel.children[selectedIndex];
     if (selectedFrame) {

@@ -17,7 +17,7 @@ Serwer używa Node.js 24 i wbudowanego SQLite. Lokalna kopia Node znajduje się 
 
 Przy pierwszym uruchomieniu zdjęcia z `assets/js/gallery-data.js` są importowane do bazy. Potem galeria przez lokalny serwer korzysta z bazy. Po każdej zmianie w panelu serwer eksportuje aktualne opisy do `assets/js/gallery-data.js`. Dzięki temu galeria działa również jako statyczna strona, np. na GitHub Pages.
 
-Panel pozwala dodawać zdjęcia, edytować metryczki i usuwać wpisy. Przy dodawaniu obraz jest zmniejszany do maksymalnie 2400 px i zapisywany jako JPG; poświata jest obliczana z pikseli. Usunięcie wpisu nie usuwa pliku zdjęcia z dysku.
+Panel pozwala dodawać zdjęcia, edytować metryczki i usuwać wpisy. Przy dodawaniu obraz jest zmniejszany do maksymalnie 2400 px i zapisywany jako JPG. Powstaje również miniatura WebP (lub JPEG, jeśli przeglądarka nie obsługuje WebP) do 800 px szerokości, ze znacznikiem `_thumb` w nazwie. Pole `thumbUrl` zapisuje się w SQLite i eksportach. Karty korzystają z miniatur, a lightbox z pełnej wersji. Poświata jest obliczana z pikseli. Usunięcie wpisu nie usuwa jego plików zdjęć z dysku.
 
 ## Logowanie
 
