@@ -89,8 +89,8 @@ test('Projects: authenticated CRUD, image replacement, export and persistence', 
   });
   assert.equal(update.status, 200);
   project = await update.json();
-  assert.match(project.src, /^assets\/uploads\//);
-  assert.ok(fs.existsSync(path.join(options.uploadDir, path.basename(project.src))));
+  assert.match(project.src, /^assets\/images\/projects\//);
+  assert.ok(fs.existsSync(path.join(options.uploadDir, 'projects', path.basename(project.src))));
   assert.equal(exported().find((item) => item.id === project.id).title.pl, 'Nowy tytuł');
   const firstImage = project.src;
   project = await (await write(endpoint, 'PUT', { ...input, image })).json();
@@ -110,5 +110,5 @@ test('Projects: authenticated CRUD, image replacement, export and persistence', 
   assert.equal((await write(endpoint, 'DELETE')).status, 200);
   assert.equal(exported().length, initial.length);
   assert.equal((await write(endpoint, 'PUT', input)).status, 404);
-  assert.equal(fs.readdirSync(options.uploadDir).length, 2);
+  assert.equal(fs.readdirSync(path.join(options.uploadDir, 'projects')).length, 2);
 });

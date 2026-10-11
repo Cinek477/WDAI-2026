@@ -25,7 +25,7 @@ Panel otworzysz kliknięciem logo na komputerze lub dwoma szybkimi stuknięciami
 
 ## Kopia zapasowa
 
-Zatrzymaj serwer i skopiuj `data/`, aby zachować bazę SQLite ze zdjęciami, projektami, prywatnymi wiadomościami i kontem administratora. Zdjęcia w `assets/uploads/` i `assets/hobby/` oraz eksporty `assets/js/gallery-data.js` i `assets/js/projects-data.js` są uwzględniane w Git. Sama baza `data/gallery.sqlite`, konfiguracja `.env` i lokalne kopie w `backups/` pozostają poza Git.
+Zatrzymaj serwer i skopiuj `data/`, aby zachować bazę SQLite ze zdjęciami, projektami, prywatnymi wiadomościami i kontem administratora. Zdjęcia w `assets/images/gallery/` i `assets/images/projects/` oraz eksporty `assets/js/gallery-data.js` i `assets/js/projects-data.js` są uwzględniane w Git. Sama baza `data/gallery.sqlite`, konfiguracja `.env` i lokalne kopie w `backups/` pozostają poza Git.
 
 ## Wysyłanie galerii na GitHub
 
@@ -38,7 +38,7 @@ Serwer nasłuchuje wyłącznie na Twoim komputerze (`127.0.0.1`). Panel nie jest
 
 Po zalogowaniu do `admin.html` wybierz zakładkę **Projekty**. Możesz dodawać, edytować i usuwać wpisy w sekcjach „Aktualne projekty” oraz „Projekty i kompetencje”. Formularz obsługuje tytuł, krótki i pełny opis, technologie, link, rok, symbol oraz opcjonalne zdjęcie. Zdjęcie można zastąpić nowym lub usunąć z kafelka. Wersja angielska jest opcjonalna.
 
-Projekty zapisują się w SQLite i automatycznie eksportują do `assets/js/projects-data.js`. Strona główna odczytuje lokalne API, a na GitHub Pages korzysta z eksportu. Aby opublikować zmiany, dodaj eksport i zdjęcia z `assets/uploads` do commita, a następnie wykonaj push. Usunięcie wpisu nie usuwa jego pliku zdjęcia z dysku.
+Projekty zapisują się w SQLite i automatycznie eksportują do `assets/js/projects-data.js`. Strona główna odczytuje lokalne API, a na GitHub Pages korzysta z eksportu. Aby opublikować zmiany, dodaj eksport i zdjęcia z `assets/images/projects/` do commita, a następnie wykonaj push. Usunięcie wpisu nie usuwa jego pliku zdjęcia z dysku.
 
 ## Wiadomości i poczta
 

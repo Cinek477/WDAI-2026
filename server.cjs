@@ -25,7 +25,7 @@ const MIME = {
 
 function createGalleryServer(options = {}) {
   const dataDir = options.dataDir || path.join(ROOT, 'data');
-  const uploadDir = options.uploadDir || path.join(ROOT, 'assets', 'uploads');
+  const uploadDir = options.uploadDir || path.join(ROOT, 'assets', 'images');
   const exportFile = options.exportFile || path.join(ROOT, 'assets/js/gallery-data.js');
   const projectExportFile =
     options.projectExportFile ||
@@ -259,7 +259,7 @@ function createGalleryServer(options = {}) {
       photo.glowColor = input.glowColor;
     return photo;
   }
-  function storeImage(dataUrl) {
+  function storeImage(dataUrl, group = 'gallery') {
     const match =
       typeof dataUrl === 'string' &&
       dataUrl.match(/^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/=]+)$/);
@@ -278,8 +278,10 @@ function createGalleryServer(options = {}) {
         status: 400,
       });
     const name = `${crypto.randomUUID()}.${match[1] === 'jpeg' ? 'jpg' : match[1]}`;
-    fs.writeFileSync(path.join(uploadDir, name), bytes, { flag: 'wx' });
-    return { src: `assets/uploads/${name}`, file: path.join(uploadDir, name) };
+    const directory = path.join(uploadDir, group);
+    fs.mkdirSync(directory, { recursive: true });
+    fs.writeFileSync(path.join(directory, name), bytes, { flag: 'wx' });
+    return { src: `assets/images/${group}/${name}`, file: path.join(directory, name) };
   }
   function normalizeProject(input, old = {}) {
     if (!input || typeof input !== 'object' || Array.isArray(input))
@@ -415,7 +417,7 @@ function createGalleryServer(options = {}) {
           const input = await body(req);
           const project = normalizeProject(input, row ? JSON.parse(row.data) : {});
           project.id = projectId || crypto.randomUUID();
-          const upload = input.image ? storeImage(input.image) : null;
+          const upload = input.image ? storeImage(input.image, 'projects') : null;
           if (upload) project.src = upload.src;
           try {
             mutateGallery(() => {

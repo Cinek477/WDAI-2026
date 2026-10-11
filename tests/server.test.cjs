@@ -152,7 +152,7 @@ test('SQLite import, upload, edit, deletion, persistence and local access rules'
   assert.equal(created.glowColor, '#ff1122');
   assert.equal(exportedPhotos().length, initial.length + 1);
   assert.deepEqual(exportedPhotos()[initial.length], created);
-  assert.equal(fs.readdirSync(options.uploadDir).length, 4);
+  assert.equal(fs.readdirSync(path.join(options.uploadDir, 'gallery')).length, 4);
   const update = await write(`/api/photos/${created.id}`, 'PUT', {
     ...photo,
     title: 'Zmieniony tytuł',
@@ -172,7 +172,7 @@ test('SQLite import, upload, edit, deletion, persistence and local access rules'
   await start();
   assert.equal((await (await fetch(`${base}/api/photos`)).json()).length, 0);
   assert.deepEqual(exportedPhotos(), []);
-  assert.equal(fs.readdirSync(options.uploadDir).length, 4);
+  assert.equal(fs.readdirSync(path.join(options.uploadDir, 'gallery')).length, 4);
   assert.equal((await write('/api/auth/logout', 'POST')).status, 200);
   assert.equal((await write('/api/photos', 'POST', photo)).status, 401);
   assert.equal((await write('/api/photos/concert-1', 'PUT', photo)).status, 401);

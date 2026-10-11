@@ -106,7 +106,7 @@ Panel i API służą do pracy lokalnej. Na hostingu statycznym można przegląda
 flowchart LR
     A[Panel administratora] --> B[(Lokalna baza SQLite)]
     B --> C[Eksport galerii i projektów do JS]
-    A --> D[Zdjęcia w assets/uploads]
+    A --> D[Zdjęcia w assets/images/gallery i projects]
     C --> E[Commit i push]
     D --> E
     E --> F[Portfolio na hostingu statycznym]
@@ -116,7 +116,8 @@ Po zapisaniu zmian panel aktualizuje pliki:
 
 - `assets/js/gallery-data.js` — zdjęcia i ich metryczki.
 - `assets/js/projects-data.js` — projekty i kompetencje.
-- `assets/uploads/` — obrazy dodane przez panel.
+- `assets/images/gallery/` — zdjęcia galerii, dodane ręcznie lub przez panel.
+- `assets/images/projects/` — zdjęcia projektów dodane przez panel.
 
 **Publikacja wymaga commita i pusha.** Panel nie wysyła zmian automatycznie na GitHub. Po skonfigurowaniu GitHub Pages strona może korzystać z eksportów bez uruchomionego backendu.
 
@@ -129,7 +130,6 @@ Baza w `data/`, hasło administratora, prywatne wiadomości, konfiguracja `.env`
 ├── knowledge.html          # Korepetycje
 ├── hobby.html              # Hobby, galeria i lightbox
 ├── contact.html            # Kontakt i kreator wiadomości
-├── kontakt.html            # Przekierowanie do contact.html
 ├── admin.html              # Panel: galeria, projekty, wiadomości
 ├── server.cjs              # Lokalny serwer, API i SQLite
 ├── inbox.cjs               # Prywatna skrzynka i powiadomienia e-mail
@@ -137,9 +137,10 @@ Baza w `data/`, hasło administratora, prywatne wiadomości, konfiguracja `.env`
 ├── assets/
 │   ├── css/                # Style podstron; controls.css — wspólne przyciski
 │   ├── js/                 # Interakcje, panel i eksporty danych
-│   ├── images/             # Portret
-│   ├── hobby/              # Początkowe zdjęcia galerii
-│   └── uploads/            # Zdjęcia dodane przez panel
+│   └── images/
+│       ├── profile/        # Portret i stałe zdjęcia profilowe
+│       ├── gallery/        # Wszystkie zdjęcia galerii Hobby
+│       └── projects/       # Zdjęcia projektów
 ├── data/                   # Lokalna baza — poza Git
 ├── scripts/                # Uruchamianie i kontrola projektu
 └── tests/                  # Testy API, danych i eksportów

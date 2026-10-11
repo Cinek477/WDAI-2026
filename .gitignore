@@ -46,4 +46,4 @@ coverage/
 Thumbs.db
 Desktop.ini
 
-# Eksporty i zdjęcia publikujemy; nie obejmuj assets/uploads regułą ignorowania.
+# Eksporty i zdjęcia publikujemy; nie obejmuj assets/images regułą ignorowania.
