@@ -1,5 +1,10 @@
 // Renderowanie modalu; nawigacja klawiaturą i cykl galerii pozostają w gallery.js.
-(() => {
+window.portfolioPages ||= {};
+window.portfolioPages['lightbox.js'] = () => {
+  const pageScope = window.portfolioPageScope || {
+    signal: new AbortController().signal,
+    cleanup: () => {},
+  };
   const dialog = document.querySelector('.photo-lightbox');
   const carousel = dialog.querySelector('.lightbox-carousel');
   const mobile = matchMedia('(max-width: 768px)');
@@ -92,7 +97,12 @@
       }
     });
   }
-  new ResizeObserver(() => requestAnimationFrame(fitText)).observe(information);
+  const observer = new ResizeObserver(() => requestAnimationFrame(fitText));
+  observer.observe(information);
+  pageScope.cleanup(() => {
+    observer.disconnect();
+    clearTimeout(scrollTimer);
+  });
 
   window.renderPortfolioLightbox = (photo, collection, select) => {
     activePhoto = photo;
@@ -281,4 +291,5 @@
     },
     { passive: true },
   );
-})();
+};
+if (!window.portfolioRouting) window.portfolioPages['lightbox.js']();

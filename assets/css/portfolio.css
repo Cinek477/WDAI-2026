@@ -602,6 +602,20 @@ footer {
   cursor: help;
 }
 @supports (view-transition-name: root) {
+  :root[data-page-transition] main {
+    view-transition-name: page-content;
+  }
+  :root[data-page-transition] :is(.navbar, .aurora-bg) {
+    view-transition-name: none;
+  }
+  :root[data-page-transition]::view-transition-old(page-content) {
+    animation: page-leave 0.4s ease-in-out both;
+    mix-blend-mode: normal;
+  }
+  :root[data-page-transition]::view-transition-new(page-content) {
+    animation: page-enter 0.4s ease-in-out both;
+    mix-blend-mode: normal;
+  }
   ::view-transition-old(root) {
     animation: none;
     mix-blend-mode: normal;
@@ -610,6 +624,25 @@ footer {
     animation: none;
     mix-blend-mode: normal;
     z-index: 1;
+  }
+}
+@keyframes page-leave {
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+    filter: blur(10px);
+  }
+}
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
   }
 }
 
@@ -756,6 +789,16 @@ footer {
   }
   .hero-bio p {
     font-size: 15px;
+  }
+  #about .hero-bio {
+    text-align: center;
+  }
+  #about .hero-bio p {
+    margin-inline: auto;
+  }
+  #about .tags,
+  #about .hero-actions {
+    justify-content: center;
   }
   .grid,
   .projects-grid,
@@ -917,6 +960,76 @@ footer {
 .project-description {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+.error-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 140px 50px;
+}
+.glass-error-card {
+  width: 100%;
+  max-width: 600px;
+  padding: 60px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+.glass-error-card h1 {
+  margin: 0 0 24px;
+  font-size: 8rem;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, #38bdf8, #a855f7);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.4));
+}
+.glass-error-card h2 {
+  margin: 0 0 16px;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  line-height: 1.4;
+}
+.glass-error-card p {
+  color: var(--muted);
+  margin: 0;
+}
+.error-page .hero-actions {
+  justify-content: center;
+}
+:root
+  .error-page
+  .hero-actions
+  .primary:not(:disabled):not([aria-disabled='true']):is(:hover, :focus-visible) {
+  transform: translateY(-2px);
+}
+:root:not([data-theme='dark']) .glass-error-card {
+  background: rgba(221, 237, 252, 0.45);
+  border-color: rgba(23, 105, 232, 0.12);
+  box-shadow: 0 30px 60px rgba(20, 46, 80, 0.12);
+}
+@media (max-width: 768px) {
+  .glass-error-card {
+    padding: 36px 24px;
+  }
+  .glass-error-card h1 {
+    font-size: clamp(5rem, 25vw, 8rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root
+    .error-page
+    .hero-actions
+    .primary:not(:disabled):not([aria-disabled='true']):is(:hover, :focus-visible) {
+    transform: none;
+  }
 }
 .project-technologies {
   font-size: 12px;

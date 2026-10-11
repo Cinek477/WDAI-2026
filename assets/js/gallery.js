@@ -1,4 +1,9 @@
-(async () => {
+window.portfolioPages ||= {};
+window.portfolioPages['gallery.js'] = async () => {
+  const pageScope = window.portfolioPageScope || {
+    signal: new AbortController().signal,
+    cleanup: () => {},
+  };
   let photos = window.portfolioPhotos;
   if (location.protocol !== 'file:') {
     try {
@@ -12,6 +17,7 @@
       // Statyczny hosting nadal może używać danych zapisanych w pliku.
     }
   }
+  if (pageScope.signal.aborted) return;
   const track = document.querySelector('.gallery-track');
   const dialog = document.querySelector('.photo-lightbox');
   const mobileQuery = matchMedia('(max-width: 768px)');
@@ -212,11 +218,19 @@
       : track.querySelector(`[data-photo-id="${CSS.escape(selectedPhoto?.id || '')}"]`);
     focusTarget?.focus({ preventScroll: true });
   });
-  document.addEventListener('portfolio-language-change', renderGallery);
-  addEventListener('resize', () => {
-    if (dialog.open) renderLightbox();
-    track.scrollLeft = cycleWidth();
-    selectCentralPhoto();
+  document.addEventListener('portfolio-language-change', renderGallery, {
+    signal: pageScope.signal,
   });
+  addEventListener(
+    'resize',
+    () => {
+      if (dialog.open) renderLightbox();
+      track.scrollLeft = cycleWidth();
+      selectCentralPhoto();
+    },
+    { signal: pageScope.signal },
+  );
+  pageScope.cleanup(() => cancelAnimationFrame(scrollFrame));
   renderGallery();
-})().catch((error) => console.error('Nie udało się uruchomić galerii:', error));
+};
+if (!window.portfolioRouting) window.portfolioPages['gallery.js']().catch(console.error);

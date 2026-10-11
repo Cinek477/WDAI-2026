@@ -91,6 +91,12 @@ test('SQLite import, upload, edit, deletion, persistence and local access rules'
     401,
   );
   assert.equal((await fetch(`${base}/data/gallery.sqlite`)).status, 404);
+  const missingPage = await fetch(`${base}/nieistniejaca/podstrona`, {
+    headers: { Accept: 'text/html' },
+  });
+  assert.equal(missingPage.status, 404);
+  assert.match(missingPage.headers.get('content-type'), /text\/html/);
+  assert.match(await missingPage.text(), /glass-error-card/);
   assert.equal((await fetch(`${base}/.local/node.zip`)).status, 404);
   assert.equal((await fetch(`${base}/assets/css/lightbox.css`)).status, 200);
   assert.equal((await fetch(`${base}/assets/js/gallery.js`)).status, 200);

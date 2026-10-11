@@ -14,7 +14,7 @@
   update();
   let running = false;
   button.addEventListener('click', async () => {
-    if (running) return;
+    if (running || root.dataset.pageTransition) return;
     const change = () => {
       root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
       update();

@@ -1,4 +1,9 @@
-(() => {
+window.portfolioPages ||= {};
+window.portfolioPages['contact.js'] = () => {
+  const pageScope = window.portfolioPageScope || {
+    signal: new AbortController().signal,
+    cleanup: () => {},
+  };
   const form = document.querySelector('#contact-form');
   const steps = [...form.querySelectorAll('.wizard-step')];
   const email = form.elements.email;
@@ -190,9 +195,14 @@
       submit.disabled = submitted;
     }
   });
-  document.addEventListener('portfolio-language-change', () => {
-    if (currentStep === 3) renderDetails();
-    status.textContent = '';
-    // Treść edytowanej wiadomości pozostaje bez zmian przy przełączeniu języka.
-  });
-})();
+  document.addEventListener(
+    'portfolio-language-change',
+    () => {
+      if (currentStep === 3) renderDetails();
+      status.textContent = '';
+      // Treść edytowanej wiadomości pozostaje bez zmian przy przełączeniu języka.
+    },
+    { signal: pageScope.signal },
+  );
+};
+if (!window.portfolioRouting) window.portfolioPages['contact.js']();

@@ -72,9 +72,9 @@ menu.addEventListener('click', (event) => {
     location.href = 'admin.html';
   }
 });
-document
-  .querySelectorAll('.navigation a')
-  .forEach((link) => link.addEventListener('click', closeMenu));
+document.querySelector('.navigation').addEventListener('click', (event) => {
+  if (event.target.closest('a')) closeMenu();
+});
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') closeMenu();
 });
@@ -94,3 +94,8 @@ document.querySelectorAll('.card-toggle').forEach((button) =>
     button.setAttribute('aria-expanded', String(expanded));
   }),
 );
+
+window.refreshPortfolioPage = () => {
+  applyLanguage(language);
+  updateScroll();
+};

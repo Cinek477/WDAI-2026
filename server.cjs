@@ -314,6 +314,22 @@ function createGalleryServer(options = {}) {
     return project;
   }
   const inbox = require('./inbox.cjs').createInbox({ db, json, body, authenticated, options });
+  function notFound(req, res) {
+    if (
+      (req.method === 'GET' || req.method === 'HEAD') &&
+      req.headers.accept?.includes('text/html')
+    ) {
+      const html = fs.readFileSync(path.join(ROOT, '404.html'));
+      res.writeHead(404, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Content-Length': html.length,
+        'Cache-Control': 'no-cache',
+      });
+      return res.end(req.method === 'HEAD' ? undefined : html);
+    }
+    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+    return res.end(req.method === 'HEAD' ? undefined : 'Nie znaleziono pliku.');
+  }
   const server = http.createServer(async (req, res) => {
     try {
       const url = new URL(req.url, 'http://localhost');
@@ -494,6 +510,17 @@ function createGalleryServer(options = {}) {
         return res.end();
       }
       const relative = pathname === '/' ? 'index.html' : pathname.replace(/^\//, '');
+      // Otwarte przed reorganizacją karty mogą nadal używać dawnych adresów zdjęć.
+      if (/^assets\/(?:hobby|uploads)\/[^/\\]+\.(?:jpe?g|png|webp)$/i.test(relative)) {
+        const name = path.basename(relative);
+        for (const group of ['gallery', 'projects']) {
+          const target = `assets/images/${group}/${name}`;
+          if (fs.existsSync(path.join(ROOT, target))) {
+            res.writeHead(302, { Location: '/' + target, 'Cache-Control': 'no-store' });
+            return res.end();
+          }
+        }
+      }
       const file = path.resolve(ROOT, relative);
       const extension = path.extname(file).toLowerCase();
       const staticAllowed =
@@ -503,13 +530,11 @@ function createGalleryServer(options = {}) {
         MIME[extension] &&
         (relative.startsWith('assets/') || !relative.includes('/'));
       if (!staticAllowed) {
-        res.writeHead(404);
-        return res.end('Nie znaleziono pliku.');
+        return notFound(req, res);
       }
       const stats = await fs.promises.stat(file);
       if (!stats.isFile()) {
-        res.writeHead(404);
-        return res.end();
+        return notFound(req, res);
       }
       res.writeHead(200, {
         'Content-Type': MIME[extension],
@@ -521,8 +546,7 @@ function createGalleryServer(options = {}) {
       fs.createReadStream(file).pipe(res);
     } catch (error) {
       if (error.code === 'ENOENT') {
-        res.writeHead(404);
-        return res.end('Nie znaleziono pliku.');
+        return notFound(req, res);
       }
       if (!res.headersSent)
         json(res, error.status || 500, {

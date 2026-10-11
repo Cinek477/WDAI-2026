@@ -30,6 +30,7 @@ Portfolio łączy projekty i kompetencje z fotografią oraz zainteresowaniami po
 | **Poświata dopasowana do zdjęcia** | Canvas analizuje kolorystykę fotografii i wybiera dominujący odcień do neonowej poświaty w lightboxie. Czerwone światło sceny daje inną aurę niż niebieskie. Wyniki są buforowane, a zapisany kolor stanowi wariant zapasowy. |
 | **Zmiana motywu jak fala** | Przejście między baby blue i navy blue rozchodzi się od góry ekranu dzięki View Transitions API. Ikona księżyca płynnie zmienia się w słońce. |
 | **Aurora w tle** | Powoli przesuwające się, rozmyte poświaty są widoczne na wszystkich podstronach i w panelu. Paleta dopasowuje się do jasnego baby blue i ciemnego granatu. |
+| **Płynne przejścia między podstronami** | Publiczne podstrony są pobierane w tle i podmieniane bez przeładowania. View Transitions animuje treść z rozmyciem i zmianą skali; Wstecz/Dalej odtwarza widok. Panel administratora korzysta z pełnego ładowania. |
 | **Kreator wiadomości** | Cztery kroki prowadzą od e-maila, przez temat i dopasowane szczegóły, do edytowalnej wiadomości. Lokalne API zapisuje ją w prywatnej skrzynce panelu. |
 | **Nawigacja zamieniająca się w wyspę** | Podczas przewijania na komputerze pasek skraca się do samych linków. Na telefonie logo otwiera animowane menu. |
 | **Galeria z poziomym przewijaniem** | Filtry pozwalają wybrać koncerty, naturę, ludzi lub miejsca. Powtarzane zestawy zdjęć tworzą wrażenie przewijania w pętli. |
@@ -130,6 +131,7 @@ Baza w `data/`, hasło administratora, prywatne wiadomości, konfiguracja `.env`
 ├── knowledge.html          # Korepetycje
 ├── hobby.html              # Hobby, galeria i lightbox
 ├── contact.html            # Kontakt i kreator wiadomości
+├── 404.html                # Strona błędu z tłem Aurora i powrotem do portfolio
 ├── admin.html              # Panel: galeria, projekty, wiadomości
 ├── server.cjs              # Lokalny serwer, API i SQLite
 ├── inbox.cjs               # Prywatna skrzynka i powiadomienia e-mail

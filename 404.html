@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <base href="/" />
+    <script>
+      if (location.hostname.endsWith('github.io') && location.pathname.split('/')[1])
+        document.querySelector('base').href = '/' + location.pathname.split('/')[1] + '/';
+    </script>
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Nie znaleziono strony — portfolio Marcina Podymy." />
+    <meta name="theme-color" content="#edf6ff" />
+    <title>404 — Marcin Podyma</title>
+    <link rel="stylesheet" href="assets/css/portfolio.css" />
+    <link rel="stylesheet" href="assets/css/controls.css" />
+    <script src="assets/js/router.js" defer></script>
+    <script src="assets/js/theme.js" defer></script>
+    <script src="assets/js/portfolio.js" defer></script>
+  </head>
+  <body class="aurora-page">
+    <div class="aurora-bg" aria-hidden="true">
+      <div class="aurora-blob blob-1"></div>
+      <div class="aurora-blob blob-2"></div>
+    </div>
+    <header class="navbar">
+      <button
+        class="logo"
+        aria-label="Menu / O mnie"
+        data-label-pl="Menu / O mnie"
+        data-label-en="Menu / About me"
+        aria-expanded="false"
+        aria-controls="navigation"
+      >
+        mp<span>.</span>
+      </button>
+      <nav
+        class="navigation"
+        id="navigation"
+        aria-label="Nawigacja"
+        data-label-pl="Nawigacja"
+        data-label-en="Navigation"
+      >
+        <a href="index.html" data-pl="Portfolio" data-en="Portfolio">Portfolio</a>
+        <a href="knowledge.html" data-pl="Korepetycje" data-en="Tutoring">Korepetycje</a>
+        <a href="hobby.html" data-pl="Hobby" data-en="Hobbies">Hobby</a>
+        <a href="contact.html" data-pl="Kontakt" data-en="Contact">Kontakt</a>
+      </nav>
+      <div class="controls">
+        <button
+          class="language"
+          aria-label="Zmień język"
+          data-label-pl="Zmień język"
+          data-label-en="Change language"
+        >
+          PL / EN</button
+        ><button class="theme" aria-label="Zmień motyw" aria-pressed="false">
+          <svg
+            class="moon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            aria-hidden="true"
+          >
+            <path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z" /></svg
+          ><svg
+            class="sun"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="error-page" aria-labelledby="error-title">
+      <section class="glass-error-card">
+        <h1 id="error-title" data-page-title data-pl="404" data-en="404">404</h1>
+        <h2
+          data-pl="Wygląda na to, że ten kadr jeszcze nie powstał."
+          data-en="Looks like this frame hasn't been captured yet."
+        >
+          Wygląda na to, że ten kadr jeszcze nie powstał.
+        </h2>
+        <p
+          data-pl="Strona, której szukasz, nie istnieje lub została przeniesiona."
+          data-en="The page you're looking for doesn't exist or has moved."
+        >
+          Strona, której szukasz, nie istnieje lub została przeniesiona.
+        </p>
+        <div class="hero-actions">
+          <a class="primary" href="index.html" data-pl="Wróć do bazy" data-en="Back to base"
+            >Wróć do bazy</a
+          >
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

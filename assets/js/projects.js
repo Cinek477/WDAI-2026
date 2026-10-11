@@ -1,4 +1,9 @@
-(() => {
+window.portfolioPages ||= {};
+window.portfolioPages['projects.js'] = () => {
+  const pageScope = window.portfolioPageScope || {
+    signal: new AbortController().signal,
+    cleanup: () => {},
+  };
   let projects = window.portfolioProjects || [];
   const local = (value) =>
     typeof value === 'string' ? value : value?.[document.documentElement.lang] || value?.pl || '';
@@ -98,7 +103,7 @@
     }
   }
   render();
-  document.addEventListener('portfolio-language-change', render);
+  document.addEventListener('portfolio-language-change', render, { signal: pageScope.signal });
   if (location.protocol !== 'file:')
     fetch('/api/projects')
       .then((response) => {
@@ -106,10 +111,11 @@
         return response.json();
       })
       .then((data) => {
-        if (Array.isArray(data)) {
+        if (!pageScope.signal.aborted && Array.isArray(data)) {
           projects = data;
           render();
         }
       })
       .catch(() => {});
-})();
+};
+if (!window.portfolioRouting) window.portfolioPages['projects.js']();
