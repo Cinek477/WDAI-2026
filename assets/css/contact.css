@@ -169,27 +169,6 @@
 .contact-status:empty {
   display: none;
 }
-:root:not([data-theme='dark']) .contact-spark {
-  color: #1769e8;
-}
-:root:not([data-theme='dark']) .contact-field input,
-:root:not([data-theme='dark']) .contact-field textarea {
-  background: linear-gradient(135deg, rgba(239, 248, 255, 0.75), rgba(195, 227, 255, 0.45));
-  border-bottom-color: rgba(23, 105, 232, 0.25);
-  box-shadow: none;
-  color-scheme: light;
-}
-:root:not([data-theme='dark']) .contact-field input:hover,
-:root:not([data-theme='dark']) .contact-field textarea:hover,
-:root:not([data-theme='dark']) .contact-field input:focus,
-:root:not([data-theme='dark']) .contact-field textarea:focus {
-  border-bottom-color: #1769e8;
-  box-shadow: 0 1px 0 #1769e8;
-}
-:root:not([data-theme='dark']) .contact-field input:autofill {
-  -webkit-text-fill-color: var(--text);
-  box-shadow: inset 0 0 0 1000px #e3f1ff;
-}
 @media (max-width: 768px) {
   .contact-card {
     grid-template-columns: 1fr;
@@ -314,4 +293,33 @@
 .contact-submit:disabled {
   opacity: 0.6;
   cursor: default;
+}
+
+/* Light wizard fields form a brighter layer than the contact card. */
+:root:not([data-theme='dark']) .contact-spark {
+  color: #0284c7;
+}
+:root:not([data-theme='dark']) .contact-field :is(input, textarea) {
+  color-scheme: light;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid #ffffff;
+  box-shadow: none;
+}
+:root:not([data-theme='dark']) .contact-field :is(input, textarea):hover {
+  border-color: #ffffff;
+  box-shadow: none;
+}
+:root:not([data-theme='dark']) .contact-field :is(input, textarea):focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+}
+:root:not([data-theme='dark']) .contact-field input:autofill {
+  -webkit-text-fill-color: var(--text);
+  box-shadow: inset 0 0 0 1000px #ffffff;
+}
+:root:not([data-theme='dark']) .contact-field input:autofill:focus {
+  border-color: #0284c7;
+  box-shadow:
+    inset 0 0 0 1000px #ffffff,
+    0 0 0 3px rgba(2, 132, 199, 0.18);
 }

@@ -156,4 +156,36 @@ window.portfolioPhotos = [
     src: 'assets/images/gallery/2400px/12d86efc-1a2b-4df3-a4b6-a14544953b36.jpg',
     thumbUrl: 'assets/images/gallery/800px/12d86efc-1a2b-4df3-a4b6-a14544953b36_thumb.jpg',
   },
+  {
+    category: 'concerts',
+    shape: 'tall',
+    title: {
+      pl: 'Oki - Finał ERA47',
+      en: 'Oki - Finał ERA47',
+    },
+    artist: 'Oki',
+    event: {
+      pl: 'Finał ERA47',
+      en: 'Finał ERA47',
+    },
+    venue: 'Tauron Arena',
+    city: {
+      pl: 'Kraków',
+      en: 'Kraków',
+    },
+    description: {
+      pl: '',
+      en: '',
+    },
+    instagram: '',
+    date: '18.12.2025',
+    place: {
+      pl: 'Tauron Arena - Kraków',
+      en: 'Tauron Arena - Kraków',
+    },
+    glowColor: '#257bdc',
+    id: '3c395686-43fb-4fb5-9168-ab38b3fae98d',
+    src: 'assets/images/gallery/2400px/4f42741f-8928-425c-b1e9-28e418480712.jpg',
+    thumbUrl: 'assets/images/gallery/800px/4f42741f-8928-425c-b1e9-28e418480712_thumb.webp',
+  },
 ];

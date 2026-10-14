@@ -1,4 +1,35 @@
 /* Wspólny wygląd kontrolek; rozmiary i rozmieszczenie należą do podstron. */
+:root
+  :is(
+    .hero-actions a,
+    .contact-submit,
+    .admin-shell .admin-panel button:not(.danger),
+    .admin-shell .admin-link,
+    .lightbox-instagram,
+    .gallery-filter,
+    .contact-radio + label,
+    .admin-shell .admin-tabs button
+  ) {
+  position: relative;
+}
+.control-neon.control-neon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  filter: drop-shadow(0 0 2px rgba(56, 189, 248, 0.55));
+}
+:disabled > .control-neon,
+[aria-disabled='true'] > .control-neon {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .control-neon {
+    display: none;
+  }
+}
 :root {
   --control-bg: linear-gradient(135deg, rgba(125, 211, 252, 0.12), rgba(23, 105, 232, 0.18));
   --control-border: rgba(23, 105, 232, 0.28);
@@ -196,5 +227,59 @@
       .photo-lightbox .lightbox-close
     ):is(:hover, :focus-visible) {
     scale: 1;
+  }
+}
+
+/* Light controls sit above the frosted panels. */
+:root:not([data-theme='dark']) {
+  --control-bg: rgba(255, 255, 255, 0.88);
+  --control-border: #ffffff;
+  --control-glow: rgba(2, 132, 199, 0.18);
+  --pill-active-bg: linear-gradient(135deg, #38bdf8, #0284c7);
+  --pill-active-border: #0284c7;
+  --pill-active-text: #ffffff;
+}
+:root:not([data-theme='dark']) .tags span {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid #ffffff;
+  color: #475569;
+}
+:root:not([data-theme='dark']) :is(.hero-actions a, .contact-submit, .instagram-cta) {
+  background: linear-gradient(135deg, #38bdf8, #0284c7);
+  border: 1px solid #0284c7;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.18);
+}
+:root:not([data-theme='dark'])
+  :is(.hero-actions a, .contact-submit, .instagram-cta):not(:disabled):not(
+    [aria-disabled='true']
+  ):is(:hover, :focus-visible) {
+  background: linear-gradient(135deg, #0284c7, #1d4ed8);
+  border-color: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.18);
+}
+:root:not([data-theme='dark'])
+  :is(.gallery-filter, .contact-radio + label):is(:hover, :focus-visible),
+:root:not([data-theme='dark']) .contact-radio:focus-visible + label {
+  color: #ffffff;
+}
+:root:not([data-theme='dark'])
+  :is(.gallery-filter[aria-pressed='true'], .contact-radio:checked + label) {
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.18);
+}
+
+/* Match the shared CTA specificity so the opacity crossfade stays visible. */
+:root:not([data-theme='dark'])
+  a.instagram-cta:not(:disabled):not([aria-disabled='true']):is(:hover, :focus-visible) {
+  background: linear-gradient(135deg, #38bdf8, #0284c7);
+  transform: scale(1.05);
+  box-shadow: 0 12px 28px rgba(2, 132, 199, 0.26);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-theme='dark'])
+    a.instagram-cta:not(:disabled):not([aria-disabled='true']):is(:hover, :focus-visible) {
+    transform: none;
   }
 }

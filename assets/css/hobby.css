@@ -30,9 +30,6 @@
 .instagram-cta:focus-visible::before {
   opacity: 1;
 }
-.instagram-cta[aria-disabled='true'] {
-  cursor: help;
-}
 .hobby-note {
   display: block;
   margin-top: 12px;
@@ -158,19 +155,6 @@
   transition: transform 0.3s;
   font-size: 12px;
 }
-@media (hover: hover) {
-  .gallery-track:has(.photo-card:hover) .photo-card:not(:hover) {
-    opacity: 0.5;
-  }
-  .photo-card:hover img,
-  .photo-card:hover .photo-placeholder {
-    transform: scale(1.06);
-  }
-  .photo-card:hover .photo-caption,
-  .photo-card:focus-visible .photo-caption {
-    transform: translateY(0);
-  }
-}
 @media (max-width: 768px) {
   .hobby-hero .hero-heading h1 {
     font-size: clamp(32px, 8vw, 46px);
@@ -217,4 +201,35 @@
   .gallery-toolbar {
     align-items: start;
   }
+}
+
+/* Crossfade the light Instagram CTA through its original opacity animation. */
+:root:not([data-theme='dark']) .instagram-cta::before {
+  background: linear-gradient(135deg, #0284c7, #1d4ed8);
+}
+:root:not([data-theme='dark']) .instagram-cta {
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-theme='dark']) .instagram-cta,
+  :root:not([data-theme='dark']) .instagram-cta::before {
+    transition: none;
+  }
+}
+
+/* Gallery interaction shared by both themes, independent of primary pointer capability. */
+:root .gallery-track .photo-card:is(:hover, :focus-visible) {
+  opacity: 1;
+}
+:root .gallery-track .photo-card:is(:hover, :focus-visible) :is(img, .photo-placeholder) {
+  transform: scale(1.06);
+}
+:root .gallery-track .photo-card:is(:hover, :focus-visible) .photo-caption {
+  transform: translateY(0);
+}
+:root .gallery-track:has(.photo-card:hover) .photo-card:not(:hover) {
+  opacity: 0.5;
 }

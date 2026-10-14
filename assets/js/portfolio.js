@@ -87,14 +87,6 @@ function updateScroll() {
 addEventListener('scroll', updateScroll, { passive: true });
 updateScroll();
 matchMedia('(max-width: 760px)').addEventListener('change', closeMenu);
-document.querySelectorAll('.card-toggle').forEach((button) =>
-  button.addEventListener('click', () => {
-    const card = button.closest('.card');
-    const expanded = card.classList.toggle('expanded');
-    button.setAttribute('aria-expanded', String(expanded));
-  }),
-);
-
 window.refreshPortfolioPage = () => {
   applyLanguage(language);
   updateScroll();

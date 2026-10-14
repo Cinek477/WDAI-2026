@@ -24,6 +24,12 @@ window.portfolioPages['projects.js'] = () => {
       items.forEach((project, index) => {
         const card = document.createElement('article');
         card.className = 'card';
+        card.addEventListener('pointerenter', (event) => {
+          if (event.pointerType === 'mouse' || event.pointerType === 'pen')
+            card.classList.add('is-hovered');
+        });
+        card.addEventListener('pointerleave', () => card.classList.remove('is-hovered'));
+        card.addEventListener('pointercancel', () => card.classList.remove('is-hovered'));
         let media;
         if (project.src) {
           card.classList.add('project-photo-card');
