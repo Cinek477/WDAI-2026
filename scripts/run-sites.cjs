@@ -1,0 +1,11 @@
+const path = require('node:path');
+const { spawnSync } = require('node:child_process');
+const { prepareSites } = require('./prepare-sites.cjs');
+const [command, ...args] = process.argv.slice(2);
+if (!['build', 'dev', 'test'].includes(command)) throw new Error('Wybierz build, dev lub test.');
+prepareSites();
+const cwd = path.resolve(__dirname, '../sites');
+const argv = command === 'test' ? ['--test', 'api.test.mjs', ...args] : ['scripts/run-framework.mjs', command, ...args];
+const result = spawnSync(process.execPath, argv, { cwd, stdio: 'inherit' });
+if (result.error) throw result.error;
+process.exitCode = result.status ?? 1;

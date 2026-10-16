@@ -2,6 +2,8 @@
 
 # Marcin Podyma · Portfolio
 
+> Kod wersji lokalnej i Sites jest teraz w jednym repozytorium. Instrukcja: [SITES.md](SITES.md). Bazy lokalna i online pozostają osobne. Poniższe opisy SQLite i eksportów dotyczą lokalnego serwera; wersja Sites ma własny backend w `sites/`.
+
 **Kod, fotografia i pomysły — w jednym miejscu.**
 
 Responsywne portfolio z niebieskim motywem, interaktywną galerią<br />

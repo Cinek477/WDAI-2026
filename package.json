@@ -4,7 +4,12 @@
   "scripts": {
     "start": "node server.cjs",
     "check": "node scripts/check-project.cjs",
-    "test": "node --test tests/*.test.cjs"
+    "test": "node --test tests/*.test.cjs",
+    "sites:prepare": "node scripts/prepare-sites.cjs",
+    "sites:stage": "node scripts/stage-sites.cjs",
+    "sites:build": "node scripts/run-sites.cjs build",
+    "sites:dev": "node scripts/run-sites.cjs dev",
+    "sites:test": "node scripts/run-sites.cjs test"
   },
   "engines": { "node": ">=24" }
 }
