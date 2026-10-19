@@ -12,6 +12,25 @@ function req(path,method='GET',data,owner=false,origin='https://portfolio.test')
  const headers={};if(method!=='GET'){headers.origin=origin;headers['content-type']='application/json';}if(owner){headers['oai-authenticated-user-id']='test-owner';headers['oai-authenticated-user-email']='podyma.marcin33@gmail.com';}
  return new Request('https://portfolio.test'+path,{method,headers,body:data===undefined?undefined:JSON.stringify(data)});
 }
+
+test('project artwork is stored once, preserves existing photos and allows later removal',async()=>{
+ const env=setup();
+ const projects=await (await handleApi(req('/api/projects'),env)).json();
+ for(const [i,name] of ['oop','database','matura'].entries()){
+  const item=projects.find(p=>p.id==='projects-'+i);
+  assert.equal(item.src.replace(/^\//,''),'assets/images/projects/illustrations/'+name+'.svg');
+  assert.equal(item.thumbUrl,item.src);
+ }
+ const item=projects.find(p=>p.id==='projects-0');
+ const update={section:item.section,title:item.title.pl,year:item.year,removeImage:true};
+ assert.equal((await handleApi(req('/api/projects/'+item.id,'PUT',update,true),env)).status,200);
+ assert.equal((await (await handleApi(req('/api/projects'),env)).json()).find(p=>p.id===item.id).src,'');
+ env.raw.prepare('DELETE FROM settings WHERE key=?').run('project-illustrations-v1');
+ env.raw.prepare("UPDATE records SET data=json_set(data,'$.src','/media/custom.jpg') WHERE id='projects-1'").run();
+ const again=await (await handleApi(req('/api/projects'),env)).json();
+ assert.equal(again.find(p=>p.id==='projects-1').src,'/media/custom.jpg');
+ env.raw.close();
+});
 test('owner authorization, durable CRUD, images and contact inbox',async()=>{
  const env=setup();
  assert.equal((await handleApi(req('/api/photos','POST',{},false),env)).status,401);

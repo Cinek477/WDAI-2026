@@ -43,6 +43,8 @@ Portfolio łączy projekty i kompetencje z fotografią oraz zainteresowaniami po
 ### Detale, które budują całość
 
 - **Glassmorphism** — półprzezroczyste elementy, rozmycie i delikatne ramki w obu motywach.
+- **Płynny neon przycisków** — zsynchronizowana smuga rysowana na Canvas podąża po zaokrąglonym obrysie; animacja zatrzymuje się poza ekranem i respektuje ograniczenie ruchu.
+- **Ilustracje aktualnych projektów** — lekkie grafiki SVG przypisane w bazie do projektów, z pastelowym tłem kart dopasowanym do ilustracji. Zdjęcia można później wymienić w panelu.
 - **Miniatury i lazy loading** — panel generuje zdjęcie do 2400 px oraz miniaturę do 800 px szerokości. Karty ładują miniatury z `thumbUrl` dopiero w pobliżu ekranu; lightbox wyświetla pełną wersję. Starsze wpisy i brakujące miniatury mają fallback do oryginału.
 - **Spójne przyciski** — wspólne style w `assets/css/controls.css`: szklane gradienty, neonowe kapsułki i delikatne powiększenie na hover. Przełączniki w navbarze zachowują minimalistyczny wygląd, a przycisk Instagrama w Hobby ma własny kolorowy gradient.
 - **PL / EN** — przełączanie języka oraz zapamiętywanie języka i motywu w przeglądarce.

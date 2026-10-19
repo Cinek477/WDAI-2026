@@ -18,6 +18,16 @@ async function seedDb(db){
  statements.push(db.prepare("INSERT OR IGNORE INTO settings (key,value) VALUES ('seed-v1','1')"));
  await db.batch(statements);
 }
+async function addProjectIllustrations(db){
+ const key='project-illustrations-v1';
+ if(await db.prepare('SELECT value FROM settings WHERE key=?').bind(key).first())return;
+ const statements=['oop','database','matura'].map((name,index)=>{
+  const src='/assets/images/projects/illustrations/'+name+'.svg';
+  return db.prepare("UPDATE records SET data=json_set(data,'$.src',?,'$.thumbUrl',?) WHERE id=? AND kind='projects' AND json_extract(data,'$.section')='projects' AND COALESCE(json_extract(data,'$.src'),'')='' AND NOT EXISTS (SELECT 1 FROM settings WHERE key=?)").bind(src,src,'projects-'+index,key);
+ });
+ statements.push(db.prepare('INSERT OR IGNORE INTO settings (key,value) VALUES (?,?)').bind(key,'1'));
+ await db.batch(statements);
+}
 function image(data,key){
  const m=typeof data==='string'&&data.match(/^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/=]+)$/);if(!m)fail('Dozwolone obrazy: JPG, PNG, WebP.');
  const bytes=Uint8Array.from(atob(m[2]),c=>c.charCodeAt(0));
@@ -40,6 +50,7 @@ export async function handleApi(request,env){
  if((path.startsWith('/api/messages')||!['GET','HEAD'].includes(method)&&path!=='/api/contact')&&!admin)fail('Zaloguj się kontem właściciela portfolio.',401);
  if(!db)fail('Baza online jest niedostępna.',503);
  await seedDb(db);
+ await addProjectIllustrations(db);
  if(path==='/api/contact'&&method==='POST'){
   const input=await body(request,32768),categories={it:['web','hackathon','other'],photo:['concert','portrait','event'],tutoring:['programming','maths','other'],other:['other']};
   const email=typeof input?.email==='string'?input.email.trim():'',message=typeof input?.message==='string'?input.message.trim():'';

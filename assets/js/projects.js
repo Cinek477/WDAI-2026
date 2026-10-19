@@ -5,6 +5,11 @@ window.portfolioPages['projects.js'] = () => {
     cleanup: () => {},
   };
   let projects = window.portfolioProjects || [];
+  const illustrations = {
+    'projects-0': 'assets/images/projects/illustrations/oop.svg',
+    'projects-1': 'assets/images/projects/illustrations/database.svg',
+    'projects-2': 'assets/images/projects/illustrations/matura.svg',
+  };
   const local = (value) =>
     typeof value === 'string' ? value : value?.[document.documentElement.lang] || value?.pl || '';
   const translated = (pl, en) => (document.documentElement.lang === 'en' ? en : pl);
@@ -30,17 +35,26 @@ window.portfolioPages['projects.js'] = () => {
         });
         card.addEventListener('pointerleave', () => card.classList.remove('is-hovered'));
         card.addEventListener('pointercancel', () => card.classList.remove('is-hovered'));
+        const illustration = project.section === 'projects' && !project.src ? illustrations[project.id] : '';
+        const savedIllustration = project.src && project.src.replace(/^\//, '') === illustrations[project.id];
+        if (illustration || savedIllustration) {
+          card.classList.add('project-illustration-card');
+          const colors = { 'projects-0': '#c6a2de', 'projects-1': '#acd8d7', 'projects-2': '#b6d7f4' };
+          card.style.setProperty('--project-art-bg', colors[project.id]);
+        }
+        const imageSrc = project.src || illustration;
+        const thumbnail = project.src ? project.thumbUrl : illustration;
         let media;
-        if (project.src) {
+        if (imageSrc) {
           card.classList.add('project-photo-card');
           media = document.createElement('div');
           media.className = 'project-media';
           const image = new Image();
-          image.src = project.thumbUrl || project.src;
+          image.src = thumbnail || imageSrc;
           image.addEventListener(
             'error',
             () => {
-              if (project.thumbUrl) image.src = project.src;
+              if (thumbnail) image.src = imageSrc;
             },
             { once: true },
           );
