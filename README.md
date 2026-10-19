@@ -82,6 +82,41 @@ powershell -ExecutionPolicy Bypass -File .\scripts\start-gallery.ps1
 
 Serwer nasłuchuje na `127.0.0.1`. Zatrzymasz go przez **Ctrl + C** w terminalu. Skrypt [stop-gallery.ps1](scripts/stop-gallery.ps1) służy do zatrzymania instancji uruchomionej w tle i zapisanej w pliku PID.
 
+## Biblioteki i technologie backendu
+
+### Backend lokalny (`server.cjs` i `inbox.cjs`)
+
+Lokalny backend działa na **Node.js 24+** i korzysta z jego wbudowanych modułów oraz API. Nie ma zewnętrznych zależności npm; routing, sesje i walidacja danych są zaimplementowane w kodzie projektu.
+
+| Moduł lub API | Do czego służy w projekcie |
+| :--- | :--- |
+| `node:http` | Uruchamia serwer HTTP, obsługuje endpointy API oraz udostępnia strony i pliki statyczne. |
+| `node:sqlite` (`DatabaseSync`) | Otwiera bazę `data/gallery.sqlite`. Przechowuje zdjęcia, projekty, ustawienia administratora i wiadomości; obsługuje zapytania SQL, transakcje i tryb WAL. |
+| `node:fs` | Odczytuje pliki strony, zapisuje przesłane zdjęcia i miniatury oraz eksportuje dane galerii i projektów do plików JavaScript. |
+| `node:path` | Buduje i normalizuje ścieżki do bazy, zdjęć i plików statycznych; pomaga sprawdzać, czy żądana ścieżka mieści się w katalogu projektu. |
+| `node:crypto` | Wylicza skrót hasła przez `scrypt`, generuje losową sól i tokeny sesji (`randomBytes`) oraz porównuje skróty przez `timingSafeEqual`. |
+| `node:util` (`promisify`) | Zamienia funkcję `crypto.scrypt` na wersję obsługiwaną przez `async` / `await`. |
+| `node:vm` | Przy pierwszym imporcie odczytuje dane z istniejących eksportów `gallery-data.js` i `projects-data.js` w osobnym kontekście JavaScript. |
+| Wbudowane `fetch` i `AbortSignal.timeout` | Wysyłają powiadomienia e-mail przez HTTP do API Resend, z limitem czasu 10 sekund. Nie jest potrzebny SDK Resend. |
+| `process.loadEnvFile` | Wczytuje lokalną konfigurację poczty z `.env`, bez dodatkowego pakietu `dotenv`. |
+
+Własny moduł `shared/normalize.cjs` normalizuje i waliduje dane zdjęć oraz projektów. `inbox.cjs` obsługuje wiadomości kontaktowe, limit zgłoszeń i statusy powiadomień. Sesje administratora i liczniki prób są przechowywane w pamięci serwera. Zmniejszanie zdjęć i tworzenie miniatur odbywa się w przeglądarce, przed wysłaniem plików do backendu.
+
+### Backend wersji Sites (`sites/`)
+
+Wersja online ma osobny backend i magazyny danych; nie korzysta z lokalnego pliku `data/gallery.sqlite`.
+
+| Biblioteka lub usługa | Do czego służy w projekcie |
+| :--- | :--- |
+| Next.js i `vinext` | Udostępniają strukturę aplikacji oraz handlery tras API i zdjęć; `vinext` dostosowuje aplikację do uruchamiania przez Vite na Cloudflare Workers. |
+| Cloudflare Workers (`cloudflare:workers`) | Uruchamia backend i udostępnia powiązania środowiska, m.in. `DB` i `BUCKET`. |
+| Cloudflare D1 | Przechowuje online zdjęcia i projekty jako rekordy, ustawienia oraz wiadomości. API wykonuje zapytania przez `env.DB`. |
+| Cloudflare R2 | Przechowuje pliki zdjęć i miniatur przez `env.BUCKET`; trasa `/media/[key]` udostępnia je przeglądarce. |
+| `drizzle-orm` i `drizzle-kit` | Definiują schemat tabel i integrację z D1 (`sites/db/`) oraz generują migracje SQL. Bieżące operacje w `sites/lib/api.js` korzystają bezpośrednio z API D1. |
+| Wrangler i `@cloudflare/vite-plugin` | Obsługują lokalne środowisko Workers, powiązania usług oraz budowanie wersji Cloudflare. |
+
+Szczegóły uruchamiania i publikacji tej wersji opisuje [SITES.md](SITES.md).
+
 <a id="panel"></a>
 
 ## 🛠️ Panel administratora
